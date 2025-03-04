@@ -22,12 +22,14 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+      <body
+        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
+      >
         <ClientProvider>
-          <div className="w-full flex flex-col h-screen">
-            <MenuBar />
-            <div className="flex flex-grow">
-              <Sidebar />
+          <div className="w-full flex h-screen pt-4 box-border">
+            <Sidebar />
+            <div className="flex flex-col flex-grow px-4">
+              <MenuBar />
               <main className="flex-1 p-4">{children}</main>
             </div>
           </div>

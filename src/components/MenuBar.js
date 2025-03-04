@@ -22,12 +22,12 @@ const MenuBar = () => {
   };
 
   return (
-    <nav className="bg-gray-800 text-white p-3 flex space-x-4">
+    <nav className="w-3/4 bg-white text-[#999999] flex space-x-4 border rounded-2xl border-black pl-4">
       {MAIN_MENU_ITEMS.map((menu) => (
         <button
           key={menu.name}
           onClick={() => handleMenuClick(menu.name)}
-          className={`p-2 rounded-md ${activeMainMenu === menu.name ? "bg-gray-600" : "hover:bg-gray-700"}`}
+          className={`h-11 ${activeMainMenu === menu.name ? "font-bold text-black" : ""}`}
         >
           {menu.name}
         </button>

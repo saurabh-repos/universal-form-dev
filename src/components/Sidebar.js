@@ -1,54 +1,46 @@
 "use client";
 
-import { useEffect, useMemo } from "react";
-import { useSelector, useDispatch } from "react-redux";
-import { useRouter, usePathname } from "next/navigation";
-import { SIDEBAR_ITEMS } from "@/constants/menuConstants";
-import { setActiveSidebarItem } from "@/app/store/slices/menuSlice";
-
+import { addForm, toggleSubItems } from "@/app/store/slices/sidebarSlice";
+import { useDispatch, useSelector } from "react-redux";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
-  const router = useRouter();
-  const pathname = usePathname();
-
-  const activeMainMenu = useSelector((state) => state.menu.activeMainMenu);
-  const activeSidebarItem = useSelector((state) => state.menu.activeSidebarItem);
-
-  // ✅ Memoize sidebarItems to prevent re-creation on every render
-  const sidebarItems = useMemo(() => SIDEBAR_ITEMS[activeMainMenu] || [], [activeMainMenu]);
-
-  useEffect(() => {
-    // ✅ Check if the current path exists in the sidebar items
-    const isCurrentPathValid = sidebarItems.some((item) => item.path === pathname);
-
-    if (!isCurrentPathValid && sidebarItems.length > 0) {
-      const firstSidebarItem = sidebarItems[0].path;
-      dispatch(setActiveSidebarItem(firstSidebarItem));
-      router.replace(firstSidebarItem); // Ensure smooth redirection
-    }
-  }, [pathname, activeMainMenu, dispatch, router, sidebarItems]); // ✅ sidebarItems is now stable
+  const forms = useSelector((state) => state.sidebar.forms);
+  const isLastFormItem = forms.length - 1;
 
   return (
-    <aside className="w-64 bg-gray-100 p-4 h-screen">
-      <h2 className="font-semibold text-lg">{activeMainMenu} Options</h2>
-      <ul className="mt-2">
-        {sidebarItems.map((item) => (
-          <li
-            key={item.path}
-            className={`p-2 rounded-md cursor-pointer ${
-              activeSidebarItem === item.path ? "bg-gray-300 font-bold" : "hover:bg-gray-200"
-            }`}
-            onClick={() => {
-              dispatch(setActiveSidebarItem(item.path));
-              router.push(item.path);
-            }}
-          >
-            {item.label}
-          </li>
+    <div className="flex flex-col w-2/12 pl-4">
+      <p>Approval Systems</p>
+      <div className="flex flex-col w-full">
+        {forms.map((form, index) => (
+          <div key={form.id} className="">
+            <div className="flex">
+              <h3 onClick={() => dispatch(toggleSubItems(form.id))}>
+                {form.label}
+              </h3>
+              {index === isLastFormItem && (
+                <button onClick={() => dispatch(addForm())}>➕</button>
+              )}
+            </div>
+
+            {form.isExpanded && (
+              <div className="flex flex-col border-gray-200 rounded-sm">
+                {form.subItems.map((sub) => (
+                  <p
+                    key={sub.id}
+                    onClick={() => console.log(sub.action)}
+                    className="hover:bg-gray-500 px-2 py-1 w-3/4 flex justify-between rounded-md"
+                  >
+                    <span>{sub.label}</span>
+                    <span>{sub.icon}</span>
+                  </p>
+                ))}
+              </div>
+            )}
+          </div>
         ))}
-      </ul>
-    </aside>
+      </div>
+    </div>
   );
 };
 
