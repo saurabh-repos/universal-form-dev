@@ -2,8 +2,9 @@ import { createSlice } from "@reduxjs/toolkit";
 import { MAIN_MENU_ITEMS, SIDEBAR_ITEMS } from "@/constants/menuConstants";
 
 const initialState = {
-  activeMainMenu: "Create Form",
-  activeSidebarItem: SIDEBAR_ITEMS.length > 0 ? SIDEBAR_ITEMS[0].path : "",
+  activeMainMenu: 0,
+  activeFormId: 0,
+  activePath: MAIN_MENU_ITEMS[0] ? MAIN_MENU_ITEMS[0].basePath + `?id=0` : "",
 };
 
 const menuSlice = createSlice({
@@ -12,19 +13,18 @@ const menuSlice = createSlice({
   reducers: {
     setActiveMainMenu: (state, action) => {
       state.activeMainMenu = action.payload;
-      const selectedMenu = MAIN_MENU_ITEMS.find((item) => item.name === action.payload);
-
-      if (selectedMenu) {
-        const firstSidebarItem = SIDEBAR_ITEMS.find(item => item.menuId === selectedMenu.id);
-
-        state.activeSidebarItem = firstSidebarItem ? firstSidebarItem.path : "";
-      }
+      const basePath = MAIN_MENU_ITEMS[action.payload]?.basePath || "";
+      state.activePath = basePath + `?id=${state.activeFormId}`;
     },
-    setActiveSidebarItem: (state, action) => {
-      state.activeSidebarItem = action.payload;
+    setActiveForm: (state, action) => {
+      state.activeFormId = action.payload;
+    },
+    setActivePath: (state, action) => {
+      const basePath = MAIN_MENU_ITEMS[state.activeFormId]?.basePath || "";
+      state.activePath = basePath + `?id=${action.payload}`;
     },
   },
 });
 
-export const { setActiveMainMenu, setActiveSidebarItem } = menuSlice.actions;
+export const { setActiveMainMenu, setActiveForm,setActivePath } = menuSlice.actions;
 export default menuSlice.reducer;
