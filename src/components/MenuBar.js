@@ -27,7 +27,7 @@ const MenuBar = () => {
   }, [activePath, router]);
 
   return (
-    <div className="flex gap-4">
+    <div className="flex">
       <nav className="w-[80%] h-11 bg-white text-[#999999] flex space-x-4 border rounded-2xl border-black pl-4">
         {MAIN_MENU_ITEMS.map((menu) => (
           <button
@@ -43,14 +43,14 @@ const MenuBar = () => {
           </button>
         ))}
       </nav>
-      <div className="w-[14%] h-11 bg-white text-[#999999] flex items-center justify-center space-x-2 border rounded-2xl border-black">
+      <div className="w-[10%] ml-[1.5%] h-11 bg-white text-[#999999] flex items-center justify-center space-x-1 border rounded-2xl border-black">
         <TbColorSwatch className="text-black cursor-pointer" />
         <span className="text-black">|</span>
         <RiArrowGoBackFill className="text-black cursor-pointer" />
         <span className="text-black">|</span>
         <RiArrowGoForwardFill className="text-black cursor-pointer" />
       </div>
-      <div className="w-[10%] h-11 bg-white text-[#999999] flex items-center justify-center space-x-2 border rounded-2xl border-black">
+      <div className="w-[7%] ml-[1.5%] h-11 bg-white text-[#999999] flex items-center justify-center space-x-1 border rounded-2xl border-black">
         <IoEyeOutline className="text-black cursor-pointer" />
         <span className="text-black">|</span>
         <IoMdLink className="text-black cursor-pointer" />
