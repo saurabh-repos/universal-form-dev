@@ -24,6 +24,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   const isLoggedIn = getCookie("token");
+  // console.log('isLoggedIn:', isLoggedIn)
 
   return (
     <html lang="en">
