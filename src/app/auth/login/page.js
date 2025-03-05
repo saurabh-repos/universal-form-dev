@@ -6,6 +6,7 @@ import { toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
 import { TextField, Button, Box, Typography } from "@mui/material";
 import { TbCircleDotted } from "react-icons/tb";
+import { useRouter } from "next/navigation";
 
 export default function LoginPage() {
   const {
@@ -13,11 +14,16 @@ export default function LoginPage() {
     handleSubmit,
     formState: { errors },
   } = useForm();
+  const router = useRouter()
 
   const onSubmit = (data) => {
     console.log("Login Data:", data);
     toast.success("Login Successful!");
   };
+
+  const handleSignUp = () =>{
+    router.push('/auth/signup')
+  }
 
   return (
     <div className="p-2 h-screen flex flex-col">
@@ -77,10 +83,11 @@ export default function LoginPage() {
             </div>
           </form>
 
-          <p className="text-center mt-4">
-            <a href="#" className="text-blue-500 text-sm hover:underline">
-              Reset password
-            </a>
+          <p className="text-center mt-4 text-blue-500 text-sm hover:underline cursor-pointer">
+            Reset password
+          </p>
+          <p className="text-center mt-1 text-blue-500 text-sm hover:underline cursor-pointer" onClick={handleSignUp}>
+            Sign Up
           </p>
         </Box>
       </Box>
