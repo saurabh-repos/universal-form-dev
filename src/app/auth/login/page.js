@@ -8,6 +8,7 @@ import { TextField, Button, Box, Typography } from "@mui/material";
 import { TbCircleDotted } from "react-icons/tb";
 import { useRouter } from "next/navigation";
 
+
 export default function LoginPage() {
   const {
     register,
@@ -16,9 +17,34 @@ export default function LoginPage() {
   } = useForm();
   const router = useRouter()
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     console.log("Login Data:", data);
-    toast.success("Login Successful!");
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL;
+      const response = await fetch(`${apiUrl}/user/login `, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify(data),
+      });
+
+      if (response.ok) {
+        const responseData = await response.json();
+        
+        // Set the token in cookies
+        document.cookie = `token=${responseData.data.accessToken}; path=/`;
+        
+        toast.success("Login Successful!");
+        // router.push("/forms/create?id=0"); 
+        window.location.href = "/forms/create?id=0";
+      } else {
+        toast.error("Login failed. Please try again.");
+      }
+    } catch (error) {
+      console.error('Login error:', error);
+      toast.error("An error occurred during login");
+    }
   };
 
   const handleSignUp = () =>{
