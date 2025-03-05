@@ -20,11 +20,11 @@ const MenuBar = () => {
     dispatch(setActiveMainMenu(menuId));
   };
 
-  useEffect(() => {
-    if (activePath) {
-      router.push(activePath);
-    }
-  }, [activePath, router]);
+  // useEffect(() => {
+  //   if (activePath) {
+  //     router.push(activePath);
+  //   }
+  // }, [activePath, router]);
 
   return (
     <div className="flex gap-4">

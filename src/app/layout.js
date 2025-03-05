@@ -3,6 +3,9 @@ import "./globals.css";
 import ClientProvider from "@/components/ClientProvider";
 import MenuBar from "@/components/MenuBar";
 import Sidebar from "@/components/Sidebar";
+import { getCookie } from "cookies-next";
+import { ToastContainer } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -20,20 +23,27 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
+  const isLoggedIn = getCookie("token");
+
   return (
     <html lang="en">
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <ClientProvider>
-          <div className="w-full flex h-screen pt-4 box-border">
-            <Sidebar />
-            <div className="flex flex-col flex-grow pl-12 pr-8">
-              <MenuBar />
-              <main className="flex-1 p-4">{children}</main>
+        {isLoggedIn ? (
+          <ClientProvider>
+            <div className="w-full flex h-screen pt-4 box-border">
+              <Sidebar />
+              <div className="flex flex-col flex-grow pl-12 pr-8">
+                <MenuBar />
+                <main className="flex-1 p-4">{children}</main>
+              </div>
             </div>
-          </div>
-        </ClientProvider>
+          </ClientProvider>
+        ) : (
+          <main className="flex-1 ">{children}</main>
+        )}
+        <ToastContainer position="top-right" autoClose={3000} />
       </body>
     </html>
   );
