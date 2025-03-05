@@ -39,7 +39,7 @@ export default function RootLayout({ children }) {
               <Sidebar />
               <div className="flex flex-col flex-grow pl-12 pr-8">
                 <MenuBar />
-                <main className="flex-1 p-4">{children}</main>
+                <main className="flex-1">{children}</main>
               </div>
             </div>
           </ClientProvider>
