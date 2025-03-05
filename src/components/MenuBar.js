@@ -5,6 +5,10 @@ import { useRouter } from "next/navigation";
 import { MAIN_MENU_ITEMS, SIDEBAR_ITEMS } from "@/constants/menuConstants";
 import { setActiveMainMenu, setActivePath } from "@/app/store/slices/menuSlice";
 import { useEffect } from "react";
+import { RiArrowGoBackFill, RiArrowGoForwardFill } from "react-icons/ri";
+import { IoEyeOutline } from "react-icons/io5";
+import { IoMdLink } from "react-icons/io";
+import { TbColorSwatch } from "react-icons/tb";
 
 const MenuBar = () => {
   const dispatch = useDispatch();
@@ -23,21 +27,35 @@ const MenuBar = () => {
   }, [activePath, router]);
 
   return (
-    <nav className="w-3/4 h-11 bg-white text-[#999999] flex space-x-4 border rounded-2xl border-black pl-4">
-      {MAIN_MENU_ITEMS.map((menu) => (
-        <button
-          key={menu.name}
-          onClick={() => handleMenuClick(menu?.id)}
-          className={`h-full ${
-            MAIN_MENU_ITEMS[activeMainMenu].name === menu?.name
-              ? "font-bold text-black"
-              : ""
-          }`}
-        >
-          {menu.name}
-        </button>
-      ))}
-    </nav>
+    <div className="flex gap-4">
+      <nav className="w-[80%] h-11 bg-white text-[#999999] flex space-x-4 border rounded-2xl border-black pl-4">
+        {MAIN_MENU_ITEMS.map((menu) => (
+          <button
+            key={menu.name}
+            onClick={() => handleMenuClick(menu?.id)}
+            className={`h-full ${
+              MAIN_MENU_ITEMS[activeMainMenu].name === menu?.name
+                ? "font-bold text-black"
+                : ""
+            }`}
+          >
+            {menu.name}
+          </button>
+        ))}
+      </nav>
+      <div className="w-[14%] h-11 bg-white text-[#999999] flex items-center justify-center space-x-2 border rounded-2xl border-black">
+        <TbColorSwatch className="text-black cursor-pointer" />
+        <span className="text-black">|</span>
+        <RiArrowGoBackFill className="text-black cursor-pointer" />
+        <span className="text-black">|</span>
+        <RiArrowGoForwardFill className="text-black cursor-pointer" />
+      </div>
+      <div className="w-[10%] h-11 bg-white text-[#999999] flex items-center justify-center space-x-2 border rounded-2xl border-black">
+        <IoEyeOutline className="text-black cursor-pointer" />
+        <span className="text-black">|</span>
+        <IoMdLink className="text-black cursor-pointer" />
+      </div>
+    </div>
   );
 };
 

@@ -43,29 +43,22 @@ const Sidebar = () => {
 
   return (
     <div className="flex flex-col w-2/12 pl-4">
-      <p className="flex justify-center items-center h-11 border border-black rounded-2xl text-sm font-bold">
+      <p className="flex justify-center items-center h-12 border border-black rounded-2xl text-sm font-bold">
         Approval Systems
       </p>
-      <div className="flex flex-col w-full">
+      <div className="flex flex-col w-full h-screen max-h-full overflow-y-auto">
+        <div className="flex items-center gap-8 mt-2">
+          <p className="text-sm font-bold ml-4">Application</p>
+          <CiCirclePlus onClick={handleAddForm} className="cursor-pointer"/>
+        </div>
         {forms.map((form, index) => (
-          <div key={form.id} className="mt-2 pl-2">
-            {/* <div className="flex justify-between px-4">
-              <h3
-                onClick={() => {
-                  dispatch(toggleSubItems(form.id));
-                  dispatch(setActiveForm(form?.menuId));
-                  dispatch(setActivePath(form.menuId));
-                }}
-                onDoubleClick={() => handleEditClick(form)}
-              >
-                {form.label}
-              </h3>
-              {index === isLastFormItem && (
-                <button onClick={handleAddForm}><CiCirclePlus /></button>
-              )}
-            </div> */}
-
-            <div className="flex justify-between px-4">
+          <div
+            key={form.id}
+            className={`mt-2 border border-gray-200 rounded-lg box-border overflow-hidden ${
+              form.isExpanded ? "py-0" : "py-1"
+            }`}
+          >
+            <div className="flex justify-between">
               {form.editMode ? (
                 <input
                   type="text"
@@ -73,35 +66,32 @@ const Sidebar = () => {
                   onChange={handleLabelChange}
                   onBlur={() => handleLabelBlur(form)}
                   autoFocus
-                  className="border-b border-gray-500 focus:outline-none w-[80%]"
+                  className="border-b pl-4 border-gray-500 focus:outline-none w-[80%] text-sm"
                 />
               ) : (
                 <h3
-                  onDoubleClick={() => handleEditClick(form)} // Enable edit mode on double-click
+                  onDoubleClick={() => handleEditClick(form)}
                   onClick={() => {
                     dispatch(toggleSubItems(form.id));
                     dispatch(setActiveForm(form.menuId));
                     dispatch(setActivePath(form.menuId));
                   }}
-                  className="cursor-pointer"
+                  className={`w-full pl-4 py-1 cursor-pointer text-sm ${
+                    form.isExpanded ? "bg-[#D9D9D9]" : ""
+                  }`}
                 >
                   {form.label}
                 </h3>
               )}
-              {index === isLastFormItem && (
-                <button onClick={handleAddForm}>
-                  <CiCirclePlus />
-                </button>
-              )}
             </div>
 
             {form.isExpanded && (
-              <div className="w-[80%] ml-2 mt-1 flex flex-col border border-gray-200 rounded-lg box-border overflow-hidden">
+              <div className="w-[80%] ml-2 flex flex-col py-[2px]">
                 {form.subItems.map((sub) => (
                   <p
                     key={sub.id}
                     onClick={() => console.log(sub.action)}
-                    className="hover:bg-[#D9D9D9] px-2 py-1 w-full text-sm flex justify-between items-center"
+                    className="px-2 my-[2px] w-full text-sm flex justify-between items-center cursor-pointer"
                   >
                     <span>{sub.label}</span>
                     <span>{sub.icon}</span>

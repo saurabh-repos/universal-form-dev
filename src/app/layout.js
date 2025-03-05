@@ -28,7 +28,7 @@ export default function RootLayout({ children }) {
         <ClientProvider>
           <div className="w-full flex h-screen pt-4 box-border">
             <Sidebar />
-            <div className="flex flex-col flex-grow px-4">
+            <div className="flex flex-col flex-grow pl-12 pr-8">
               <MenuBar />
               <main className="flex-1 p-4">{children}</main>
             </div>
