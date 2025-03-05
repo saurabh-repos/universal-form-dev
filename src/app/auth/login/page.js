@@ -29,17 +29,17 @@ export default function LoginPage() {
         body: JSON.stringify(data),
       });
 
-      if (response.ok) {
-        const responseData = await response.json();
-        
+      const responseData = await response.json();
+      if (responseData.success) {
+
         // Set the token in cookies
-        document.cookie = `token=${responseData.data.accessToken}; path=/`;
-        
         toast.success("Login Successful!");
+        document.cookie = `token=${responseData.data.accessToken}; path=/`;
+
         // router.push("/forms/create?id=0"); 
         window.location.href = "/forms/create?id=0";
       } else {
-        toast.error("Login failed. Please try again.");
+        toast.error(responseData.errors);
       }
     } catch (error) {
       console.error('Login error:', error);
@@ -47,7 +47,7 @@ export default function LoginPage() {
     }
   };
 
-  const handleSignUp = () =>{
+  const handleSignUp = () => {
     router.push('/auth/signup')
   }
 

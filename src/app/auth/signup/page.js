@@ -16,31 +16,121 @@ export default function SignupPage() {
     formState: { errors },
     watch,
     resetField,
+    getValues,
   } = useForm();
   const [isEmailVerified, setIsEmailVerified] = useState(false);
   const [otpSent, setOtpSent] = useState(false);
   const [emailDisabled, setEmailDisabled] = useState(false);
   const router = useRouter();
+  const [isLoading, setIsLoading] = useState(false);
 
-  const onSubmit = (data) => {
+  const onSubmit = async (data) => {
     if (!isEmailVerified) {
       toast.error("Please verify your email first!");
       return;
     }
-    console.log("Signup Data:", data);
-    toast.success("Signup Successful!");
-    router.push("/auth/login");
+    
+    try {
+      setIsLoading(true);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/register`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          username: data.username,
+          email: data.email,
+          password: data.password,
+          dob: data.dob,
+        }),
+      });
+
+      const responseData = await response.json();
+      if (!responseData.success) {
+        throw new Error(responseData.errors);
+      }
+
+
+      toast.success("Signup Successful!");
+      document.cookie = `token=${responseData.data.accessToken}; path=/`;
+        
+        // router.push("/forms/create?id=0"); 
+        window.location.href = "/forms/create?id=0";
+    } catch (error) {
+      toast.error(error.message || "Registration failed");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleVerifyEmail = () => {
-    setOtpSent(true);
-    setEmailDisabled(true);
-    toast.info("OTP sent to your email!");
+  const handleVerifyEmail = async () => {
+    const email = getValues("email");
+    if (!email) {
+      toast.error("Please enter an email address");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/sendOtp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          username: email.split('@')[0],
+          reason: "Register"
+        }),
+      });
+      const responseData = await response.json();
+      if (!responseData.success) {
+        throw new Error(responseData.errors);
+      }
+
+      setOtpSent(true);
+      setEmailDisabled(true);
+      toast.info("OTP sent to your email!");
+    } catch (error) {
+      toast.error(error.message || "Failed to send OTP");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
-  const handleOtpVerification = () => {
-    setIsEmailVerified(true);
-    toast.success("Email Verified Successfully!");
+  const handleOtpVerification = async () => {
+    const otp = getValues("otp");
+    const email = getValues("email");
+    
+    if (!otp) {
+      toast.error("Please enter OTP");
+      return;
+    }
+
+    try {
+      setIsLoading(true);
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/user/verifyOtp`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          email,
+          otp: parseInt(otp),
+        }),
+      });
+      const responseData = await response.json();
+      if (!responseData.success) {
+        throw new Error(responseData.errors);
+      }
+
+      setIsEmailVerified(true);
+      toast.success("Email Verified Successfully!");
+    } catch (error) {
+      toast.error(error.message || "OTP verification failed");
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleGoogleLogin = () => {
@@ -100,8 +190,9 @@ export default function SignupPage() {
                 mt: 2,
               }}
               onClick={handleVerifyEmail}
+              disabled={isLoading}
             >
-              Verify Email
+              {isLoading ? "Sending..." : "Verify Email"}
             </Button>
           )}
 
