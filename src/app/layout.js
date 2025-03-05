@@ -6,6 +6,7 @@ import Sidebar from "@/components/Sidebar";
 import { getCookie } from "cookies-next";
 import { ToastContainer } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
+import { cookies } from "next/headers";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -23,8 +24,9 @@ export const metadata = {
 };
 
 export default function RootLayout({ children }) {
-  const isLoggedIn = getCookie("token");
-  // console.log('isLoggedIn:', isLoggedIn)
+  const cookieStore = cookies();
+  const isLoggedIn = cookieStore.get("token")?.value;
+  console.log("isLoggedIn:", isLoggedIn);
 
   return (
     <html lang="en">
