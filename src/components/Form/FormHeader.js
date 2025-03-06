@@ -1,65 +1,50 @@
-import React, { useState } from 'react';
+"use client";
+import React, { useRef } from "react";
 
-function FormHeader() {
-  const [title, setTitle] = useState('Untitled Form');
-  const [description, setDescription] = useState('Form description');
-  const [isEditingTitle, setIsEditingTitle] = useState(false);
-  const [isEditingDescription, setIsEditingDescription] = useState(false);
+function FormHeader({ fieldId, selectedFieldId, setSelectedFieldId }) {
+  const titleRef = useRef(null);
+  const descriptionRef = useRef(null);
 
-  const handleDoubleClickTitle = () => {
-    setIsEditingTitle(true);
+  const handleEdit = (ref, placeholder) => {
+    if (ref.current.innerText === placeholder) {
+      ref.current.innerText = "";
+    }
+    setTimeout(() => ref.current?.focus(), 0);
   };
 
-  const handleDoubleClickDescription = () => {
-    setIsEditingDescription(true);
-  };
-
-  const handleChangeTitle = (e) => {
-    setTitle(e.target.value);
-  };
-
-  const handleChangeDescription = (e) => {
-    setDescription(e.target.value);
-  };
-
-  const handleBlurTitle = () => {
-    setIsEditingTitle(false);
-  };
-
-  const handleBlurDescription = () => {
-    setIsEditingDescription(false);
+  const handleBlur = (ref, placeholder) => {
+    if (!ref.current.innerText.trim()) {
+      ref.current.innerText = placeholder;
+    }
   };
 
   return (
-    <div className='w-[80%] border border-black rounded-2xl mt-4 p-2 min-h-auto'>
-      {isEditingTitle ? (
-        <input
-          type="text"
-          value={title}
-          onChange={handleChangeTitle}
-          onBlur={handleBlurTitle}
-          className='text-2xl font-bold text-black outline-none w-full'
-          autoFocus
-        />
-      ) : (
-        <p className='text-2xl font-bold text-black break-words' onDoubleClick={handleDoubleClickTitle}>
-          {title}
-        </p>
-      )}
-      {isEditingDescription ? (
-        <input
-          type="text"
-          value={description}
-          onChange={handleChangeDescription}
-          onBlur={handleBlurDescription}
-          className='text-sm font-normal text-[#999999] outline-none w-full'
-          autoFocus
-        />
-      ) : (
-        <p className='text-sm font-normal text-[#999999] break-words' onDoubleClick={handleDoubleClickDescription}>
-          {description}
-        </p>
-      )}
+    <div
+      className={`w-[80%] border border-black rounded-2xl p-2 pl-4 min-h-auto space-y-2 ${
+        selectedFieldId === fieldId ? "border-black border-2" : ""
+      }`}
+      onClick={() => setSelectedFieldId(fieldId)}
+    >
+      <p
+        ref={titleRef}
+        contentEditable
+        suppressContentEditableWarning
+        className="text-2xl font-bold text-black break-words outline-none w-full"
+        onFocus={() => handleEdit(titleRef, "Untitled Form")}
+        onBlur={() => handleBlur(titleRef, "Untitled Form")}
+      >
+        Untitled Form
+      </p>
+      <p
+        ref={descriptionRef}
+        contentEditable
+        suppressContentEditableWarning
+        className="text-sm font-normal text-[#999999] break-words outline-none w-full"
+        onFocus={() => handleEdit(descriptionRef, "Form description")}
+        onBlur={() => handleBlur(descriptionRef, "Form description")}
+      >
+        Form description
+      </p>
     </div>
   );
 }
