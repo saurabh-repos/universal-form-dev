@@ -1,10 +1,9 @@
 import React from "react";
 import FieldTypeSelect from "./FieldTypeSelect";
-import { Switch } from "@mui/material";
 import { IoCopyOutline } from "react-icons/io5";
-import { CiCircleMore } from "react-icons/ci";
 import { BiTrash } from "react-icons/bi";
 import ToggleSwitch from "../ToggleSwitch";
+import FieldModal from "../FieldModal";
 
 function FieldToolbar() {
   return (
@@ -21,7 +20,7 @@ function FieldToolbar() {
         <div className="flex items-center gap-2 ml-2">
           <IoCopyOutline className="w-6 h-6 cursor-pointer" />
           <BiTrash className="w-6 h-6 cursor-pointer" />
-          <CiCircleMore className="w-6 h-6 cursor-pointer" />
+          <FieldModal />
         </div>
       </div>
     </div>

@@ -59,7 +59,7 @@ function CustomSelect({ options, selected, onSelect, maxHeight,maxWidth }) {
       >
         {selectedOption?.icon && <span className="inline-block mr-2">{selectedOption.icon}</span>}
         {selectedOption?.label}
-        <span className="">
+        <span className="ml-2">
           {isOpen ? <FaAngleUp className='text-[#999999]'/> : <FaAngleDown className='text-[#999999]'/>}
         </span>
       </div>
