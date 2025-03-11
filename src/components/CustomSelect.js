@@ -1,5 +1,6 @@
 "use client";
 import React, { useEffect, useRef, useState } from 'react';
+import { FaAngleDown, FaAngleUp, FaCaretDown, FaCaretUp } from 'react-icons/fa';
 
 function CustomSelect({ options, selected, onSelect, maxHeight,maxWidth }) {
   const [isOpen, setIsOpen] = useState(false);
@@ -9,7 +10,7 @@ function CustomSelect({ options, selected, onSelect, maxHeight,maxWidth }) {
 
   const handleSelect = (option) => {
     setSelectedOption(option);
-    onSelect(option); // Ensure the onSelect function gets called
+    onSelect(option); 
     setIsOpen(false);
   };
 
@@ -54,10 +55,13 @@ function CustomSelect({ options, selected, onSelect, maxHeight,maxWidth }) {
     <div ref={selectRef} className="relative" style={{ maxWidth: maxWidth }}>
       <div
         onClick={toggleOpen}
-        className="w-full cursor-pointer focus:ring-2 focus:ring-blue-500"
+        className="flex items-center w-full cursor-pointer focus:ring-2 focus:ring-blue-500"
       >
-        {selectedOption.icon && <span className="inline-block mr-2">{selectedOption.icon}</span>}
-        {selectedOption.label}
+        {selectedOption?.icon && <span className="inline-block mr-2">{selectedOption.icon}</span>}
+        {selectedOption?.label}
+        <span className="">
+          {isOpen ? <FaAngleUp className='text-[#999999]'/> : <FaAngleDown className='text-[#999999]'/>}
+        </span>
       </div>
       {isOpen && (
         <div

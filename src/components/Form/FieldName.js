@@ -38,7 +38,7 @@ function FieldName() {
   };
 
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className="relative pt-2 pl-4">
       <p
         ref={editorRef}
         contentEditable

@@ -38,7 +38,7 @@ function FieldDescription() {
   };
 
   return (
-    <div ref={containerRef} className="relative">
+    <div ref={containerRef} className="relative pl-4">
       <p
         ref={editorRef}
         contentEditable

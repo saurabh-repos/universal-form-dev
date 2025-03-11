@@ -41,7 +41,6 @@ const questionTypes = [
 function FieldTypeSelect() {
   const [selectedType, setSelectedType] = useState(questionTypes[2]);
 
-  console.log("selectedType", selectedType);
 
   return (
     <div className="relative w-full">
@@ -50,7 +49,7 @@ function FieldTypeSelect() {
         selected={selectedType}
         onSelect={setSelectedType}
         maxHeight={280}
-        maxWidth={250}
+        maxWidth={180}
       />
     </div>
   );

@@ -8,7 +8,7 @@ import ToggleSwitch from "../ToggleSwitch";
 
 function FieldToolbar() {
   return (
-    <div className="flex items-center">
+    <div className="flex items-center border-t border-black p-2 pl-4">
       <div className="w-[35%]">
         <FieldTypeSelect />
       </div>
