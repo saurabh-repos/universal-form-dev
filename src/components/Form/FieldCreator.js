@@ -1,7 +1,7 @@
 import React from "react";
 import FieldName from "./FieldName";
 import FieldDescription from "./FieldDescription";
-import RadioOptionsCreator from "./RadioOptionsCreator";
+import MultipleChoice from "./FieldType/MultipleChoice";
 import FieldToolbar from "./FieldToolbar";
 import ShortAnswer from "./FieldType/ShortAnswer";
 
@@ -15,7 +15,7 @@ const FieldCreator = ({ fieldId, selectedFieldId, setSelectedFieldId }) => {
     >
         <FieldName />
         <FieldDescription />
-        {/* <RadioOptionsCreator /> */}
+        <MultipleChoice />
         <ShortAnswer/>
       <FieldToolbar />
     </div>

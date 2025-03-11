@@ -2,7 +2,7 @@
 import React, { useState } from "react";
 import { IoIosRadioButtonOff } from "react-icons/io";
 
-function RadioOptionsCreator() {
+function MultipleChoice() {
   const [options, setOptions] = useState([{ id: Date.now(), text: "" }]);
 
   const handleOptionChange = (id, text) => {
@@ -21,7 +21,7 @@ function RadioOptionsCreator() {
   };
 
   return (
-    <div className="w-full flex flex-col gap-1">
+    <div className="w-full flex flex-col gap-1 pl-4">
       {options.map((option) => (
         <div key={option.id} className="flex items-center">
           <IoIosRadioButtonOff className="text-base text-[#999999]" />
@@ -48,4 +48,4 @@ function RadioOptionsCreator() {
   );
 }
 
-export default RadioOptionsCreator;
+export default MultipleChoice;
