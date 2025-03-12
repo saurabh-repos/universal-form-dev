@@ -5,6 +5,7 @@ import FieldCreator from "@/components/Form/FieldCreator";
 import FormHeader from "@/components/Form/FormHeader";
 import FormTools from "@/components/Form/FormTools";
 import { useSearchParams } from "next/navigation";
+import { useAppForm } from "@/hooks/useAppForm";
 
 const CreateFormPage = () => {
   const searchParams = useSearchParams();
@@ -13,10 +14,13 @@ const CreateFormPage = () => {
   const [selectedFieldId, setSelectedFieldId] = useState(-1);
   const [fields, setFields] = useState([]);
   const [fieldCounter, setFieldCounter] = useState(0);
+  const {createNewForm} = useAppForm()
+  
 
   const addField = () => {
     setFieldCounter((prev) => prev + 1);
     setFields([...fields, fieldCounter]);
+    // createNewForm()
   };
 
   return (

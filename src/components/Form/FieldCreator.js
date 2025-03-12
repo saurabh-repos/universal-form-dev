@@ -4,6 +4,9 @@ import FieldDescription from "./FieldDescription";
 import MultipleChoice from "./FieldType/MultipleChoice";
 import FieldToolbar from "./FieldToolbar";
 import ShortAnswer from "./FieldType/ShortAnswer";
+import Checkbox from "./FieldType/Checkbox";
+import Dropdown from "./FieldType/Dropdown";
+
 
 const FieldCreator = ({ fieldId, selectedFieldId, setSelectedFieldId }) => {
   return (
@@ -16,6 +19,8 @@ const FieldCreator = ({ fieldId, selectedFieldId, setSelectedFieldId }) => {
         <FieldName />
         <FieldDescription />
         <MultipleChoice />
+        <Checkbox/>
+        <Dropdown/>
         <ShortAnswer/>
       <FieldToolbar />
     </div>
