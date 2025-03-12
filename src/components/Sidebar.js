@@ -1,15 +1,23 @@
 "use client";
 
-import { setActiveForm, setActivePath } from "@/app/store/slices/menuSlice";
 import {
-  addForm,
+  setActiveForm,
+  setActiveMainMenu,
+  setActivePath,
+} from "@/app/store/slices/menuSlice";
+import {
+  setCreatedForms,
   setEditMode,
+  setForms,
   toggleSubItems,
   updateFormLabel,
 } from "@/app/store/slices/sidebarSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { CiCirclePlus } from "react-icons/ci";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { sideItems } from "@/constants/menuConstants";
+import { createForm } from "@/app/store/slices/formSlice";
+import { newForm } from "@/constants/newForm";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
@@ -18,11 +26,19 @@ const Sidebar = () => {
   const [editedLabel, setEditedLabel] = useState("");
 
   const handleAddForm = () => {
-    dispatch(addForm());
-    const newFormId = forms.length;
-    dispatch(setActiveForm(newFormId));
-    dispatch(setActivePath(newFormId));
+    // dispatch(createForm(newForm));
+    // const newFormId = forms.length;
+    // dispatch(setActiveForm(newFormId));
+    // dispatch(setActivePath(newFormId));
+
+    dispatch(createForm(newForm))
+      .unwrap()
+      .then((data) => {
+        dispatch(setCreatedForms(data?.data));
+      });
   };
+
+  useEffect(() => {}, [forms]);
 
   const handleEditClick = (form) => {
     setEditedLabel(form.label);
@@ -49,7 +65,7 @@ const Sidebar = () => {
       <div className="flex flex-col w-full h-screen max-h-full overflow-y-auto">
         <div className="flex items-center gap-8 mt-2">
           <p className="text-sm font-bold ml-4">Application</p>
-          <CiCirclePlus onClick={handleAddForm} className="cursor-pointer"/>
+          <CiCirclePlus onClick={handleAddForm} className="cursor-pointer" />
         </div>
         {forms.map((form, index) => (
           <div
@@ -72,9 +88,11 @@ const Sidebar = () => {
                 <h3
                   onDoubleClick={() => handleEditClick(form)}
                   onClick={() => {
+                    console.log(form)
                     dispatch(toggleSubItems(form.id));
-                    dispatch(setActiveForm(form.menuId));
-                    dispatch(setActivePath(form.menuId));
+                    dispatch(setActiveMainMenu(0));
+                    dispatch(setActiveForm(form.id));
+                    dispatch(setActivePath(form.id));
                   }}
                   className={`w-full pl-4 py-1 cursor-pointer text-sm ${
                     form.isExpanded ? "bg-[#D9D9D9]" : ""
@@ -87,7 +105,7 @@ const Sidebar = () => {
 
             {form.isExpanded && (
               <div className="w-[80%] ml-2 flex flex-col py-[2px]">
-                {form.subItems.map((sub) => (
+                {sideItems.map((sub) => (
                   <p
                     key={sub.id}
                     onClick={() => console.log(sub.action)}

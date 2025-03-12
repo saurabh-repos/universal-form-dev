@@ -1,21 +1,30 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import FieldCreator from "@/components/Form/FieldCreator";
 import FormHeader from "@/components/Form/FormHeader";
 import FormTools from "@/components/Form/FormTools";
 import { useSearchParams } from "next/navigation";
-import { useAppForm } from "@/hooks/useAppForm";
+import { useDispatch } from "react-redux";
+import { fetchForms } from "@/app/store/slices/formSlice";
+import { setForms } from "@/app/store/slices/sidebarSlice";
+
 
 const CreateFormPage = () => {
   const searchParams = useSearchParams();
+  const dispatch = useDispatch()
   const id = searchParams.get("id");
-
   const [selectedFieldId, setSelectedFieldId] = useState(-1);
   const [fields, setFields] = useState([]);
   const [fieldCounter, setFieldCounter] = useState(0);
-  const {createNewForm} = useAppForm()
-  
+ 
+  useEffect(()=>{
+    dispatch(fetchForms())
+    .unwrap()
+    .then((data) => {
+      dispatch(setForms(data));
+    })
+  },[])
 
   const addField = () => {
     setFieldCounter((prev) => prev + 1);

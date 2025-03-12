@@ -14,10 +14,12 @@ const MenuBar = () => {
   const dispatch = useDispatch();
   const router = useRouter();
   const activeMainMenu = useSelector((state) => state.menu.activeMainMenu);
+  const activeFormId = useSelector((state) => state.menu.activeFormId);
   const activePath = useSelector((state) => state.menu.activePath);
 
   const handleMenuClick = (menuId) => {
     dispatch(setActiveMainMenu(menuId));
+    dispatch(setActivePath(activeFormId))
   };
 
   useEffect(() => {

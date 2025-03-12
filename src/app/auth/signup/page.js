@@ -55,7 +55,7 @@ export default function SignupPage() {
       document.cookie = `token=${responseData.data.accessToken}; path=/`;
         
         // router.push("/forms/create?id=0"); 
-        window.location.href = "/forms/create?id=0";
+        window.location.href = "/forms/create";
     } catch (error) {
       toast.error(error.message || "Registration failed");
     } finally {

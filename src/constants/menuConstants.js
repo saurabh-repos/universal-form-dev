@@ -23,3 +23,11 @@ export const SIDEBAR_ITEMS = [
     editMode: false,
   },
 ];
+
+
+
+export const sideItems = [
+  { id: 1, label: "Header", icon: <PiFlagBanner />, action: "headerAction" },
+  { id: 2, label: "Publish Changes", icon:<FiSend />, action: "publishAction" },
+  { id: 3, label: "Delete", icon: <RiDeleteBin6Line />, action: "deleteAction" }
+]
