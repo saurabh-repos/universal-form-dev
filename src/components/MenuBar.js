@@ -29,7 +29,7 @@ const MenuBar = () => {
   }, [activePath, router]);
 
   return (
-    <div className="flex">
+    <div className="flex sticky">
       <nav className="w-[80%] h-11 bg-white text-[#999999] flex space-x-4 border rounded-2xl border-black pl-4">
         {MAIN_MENU_ITEMS.map((menu) => (
           <button

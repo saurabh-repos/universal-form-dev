@@ -34,11 +34,11 @@ export default async function RootLayout({ children }) {
       >
         {isLoggedIn ? (
           <ClientProvider>
-            <div className="w-full flex pt-4 box-border h-screen">
+            <div className="w-full flex h-screen">
               <Sidebar />
-              <div className="flex flex-col flex-grow pl-12 pr-8 h-screen max-h-screen overflow-y-auto">
+              <div className="flex flex-col flex-grow pl-12 pt-4 pr-8">
                 <MenuBar />
-                <main className="flex-1">{children}</main>
+                <main className="flex-1 h-screen max-h-screen overflow-y-auto">{children}</main>
               </div>
             </div>
           </ClientProvider>

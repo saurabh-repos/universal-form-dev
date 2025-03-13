@@ -56,7 +56,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="flex flex-col w-2/12 pl-4 h-full sticky">
+    <div className="flex flex-col w-2/12 pl-4 h-full sticky pt-4">
       <p className="flex justify-center items-center h-12 border border-black rounded-2xl text-sm font-bold">
         Approval Systems
       </p>
