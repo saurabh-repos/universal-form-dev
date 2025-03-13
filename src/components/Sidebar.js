@@ -1,28 +1,26 @@
 "use client";
 
-import {
-  setActiveForm,
-  setActiveMainMenu,
-  setActivePath,
-} from "@/app/store/slices/menuSlice";
-import {
-  setCreatedForms,
-  setEditMode,
-  setForms,
-  toggleSubItems,
-  updateFormLabel,
-} from "@/app/store/slices/sidebarSlice";
 import { useDispatch, useSelector } from "react-redux";
 import { CiCirclePlus } from "react-icons/ci";
 import { useEffect, useState } from "react";
 import { sideItems } from "@/constants/menuConstants";
-import { createForm } from "@/app/store/slices/formSlice";
 import { newForm } from "@/constants/newForm";
+import { createForm } from "@/redux/asyncActions/formActions";
+import {
+  setCreatedForms,
+  setEditMode,
+  toggleSubItems,
+  updateFormLabel,
+} from "@/redux/store/slices/sidebarSlice";
+import {
+  setActiveForm,
+  setActiveMainMenu,
+  setActivePath,
+} from "@/redux/store/slices/menuSlice";
 
 const Sidebar = () => {
   const dispatch = useDispatch();
   const forms = useSelector((state) => state.sidebar.forms);
-  const isLastFormItem = forms.length - 1;
   const [editedLabel, setEditedLabel] = useState("");
 
   const handleAddForm = () => {
@@ -58,7 +56,7 @@ const Sidebar = () => {
   };
 
   return (
-    <div className="flex flex-col w-2/12 pl-4">
+    <div className="flex flex-col w-2/12 pl-4 h-full sticky">
       <p className="flex justify-center items-center h-12 border border-black rounded-2xl text-sm font-bold">
         Approval Systems
       </p>
@@ -88,7 +86,7 @@ const Sidebar = () => {
                 <h3
                   onDoubleClick={() => handleEditClick(form)}
                   onClick={() => {
-                    console.log(form)
+                    console.log(form);
                     dispatch(toggleSubItems(form.id));
                     dispatch(setActiveMainMenu(0));
                     dispatch(setActiveForm(form.id));

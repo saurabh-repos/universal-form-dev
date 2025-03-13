@@ -1,5 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
-import { MAIN_MENU_ITEMS, SIDEBAR_ITEMS } from "@/constants/menuConstants";
+import { MAIN_MENU_ITEMS } from "@/constants/menuConstants";
 
 const initialState = {
   activeMainMenu: 0,

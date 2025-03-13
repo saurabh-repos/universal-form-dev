@@ -2,7 +2,7 @@
 // import {
 //   createForm,
 //   setActiveForm,
-//   updateFormDetails,
+//   updateForm,
 //   addSection,
 //   removeSection,
 //   updateSection,
@@ -25,7 +25,7 @@
 //   const createNewForm = () => dispatch(createForm());
 //   const setActive = (formId) => dispatch(setActiveForm(formId));
 //   const updateForm = (formId, key, value) =>
-//     dispatch(updateFormDetails({ formId, key, value }));
+//     dispatch(updateForm({ formId, key, value }));
 //   const deleteFormById = (formId) => dispatch(deleteForm(formId));
 //   const clearAll = () => dispatch(clearAllForms());
   

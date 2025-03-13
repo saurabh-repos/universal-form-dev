@@ -3,12 +3,12 @@
 import { useSelector, useDispatch } from "react-redux";
 import { useRouter } from "next/navigation";
 import { MAIN_MENU_ITEMS, SIDEBAR_ITEMS } from "@/constants/menuConstants";
-import { setActiveMainMenu, setActivePath } from "@/app/store/slices/menuSlice";
 import { useEffect } from "react";
 import { RiArrowGoBackFill, RiArrowGoForwardFill } from "react-icons/ri";
 import { IoEyeOutline } from "react-icons/io5";
 import { IoMdLink } from "react-icons/io";
 import { TbColorSwatch } from "react-icons/tb";
+import { setActiveMainMenu, setActivePath } from "@/redux/store/slices/menuSlice";
 
 const MenuBar = () => {
   const dispatch = useDispatch();

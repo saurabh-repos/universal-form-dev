@@ -5,11 +5,11 @@ import { BiTrash } from "react-icons/bi";
 import ToggleSwitch from "../ToggleSwitch";
 import FieldModal from "../FieldModal";
 
-function FieldToolbar() {
+function FieldToolbar({selectedType, setSelectedType }) {
   return (
     <div className="flex items-center border-t border-black p-2 pl-4">
       <div className="w-[35%]">
-        <FieldTypeSelect />
+        <FieldTypeSelect selectedType={selectedType} setSelectedType={setSelectedType} />
       </div>
       <div className="w-[65%] flex items-center justify-end gap-4">
         <div className="flex items-center gap-2 bg-white">
