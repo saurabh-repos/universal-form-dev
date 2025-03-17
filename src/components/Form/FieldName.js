@@ -20,8 +20,11 @@ function FieldName({ fieldIndex, formId, tag }) {
     if (!containerRef.current.contains(e.relatedTarget)) {
       const text = editorRef.current?.innerText.trim();
       setHasText(text.length > 0);
+      if (!text.length) {
+        editorRef.current.innerHTML = ""; // Ensure it's truly empty
+      }
       setIsEditing(false);
-      saveFieldName(text);
+      // saveFieldName(text);
     }
   };
 
@@ -54,11 +57,12 @@ function FieldName({ fieldIndex, formId, tag }) {
         onBlur={handleBlurChangeFieldName}
         onClick={handleFieldNameEdit}
         onInput={handleInput}
-        className={`text-base font-normal w-full outline-none transition-all duration-300 ${
+        data-placeholder="Field Name"
+        className={`text-base font-normal w-full outline-none transition-all duration-300 relative ${
           hasText ? "text-black" : "text-[#999999]"
         }`}
       >
-        {hasText ? tag.title : "Field Name"}
+        {tag.title || ""}
       </p>
 
       {isEditing && (
@@ -77,9 +81,10 @@ function FieldName({ fieldIndex, formId, tag }) {
             color: blue;
             text-decoration: underline;
           }
-          p:empty:before {
-            content: "Field Name";
+          p[data-placeholder]:empty:before {
+            content: attr(data-placeholder);
             color: #999999;
+            pointer-events: none;
           }
         `}
       </style>

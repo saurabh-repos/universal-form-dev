@@ -17,6 +17,9 @@ function FieldDescription({ tag }) {
     if (!containerRef.current.contains(e.relatedTarget)) {
       const text = editorRef.current?.innerText.trim();
       setHasText(text.length > 0);
+      if (!text.length) {
+        editorRef.current.innerHTML = ""; // Ensure it's truly empty
+      }
       setIsEditing(false);
     }
   };
@@ -46,11 +49,12 @@ function FieldDescription({ tag }) {
         onBlur={handleBlurChangeFieldName}
         onClick={handleFieldNameEdit}
         onInput={handleInput}
-        className={`text-base font-normal w-full outline-none transition-all duration-300 ${
+        data-placeholder="Field Description"
+        className={`text-base font-normal w-full outline-none transition-all duration-300 relative ${
           hasText ? "text-black" : "text-[#999999]"
         }`}
       >
-        {hasText ? tag.description : "Field Description"}
+        {tag.description || ""}
       </p>
 
       {isEditing && (
@@ -69,9 +73,10 @@ function FieldDescription({ tag }) {
             color: blue;
             text-decoration: underline;
           }
-          p:empty:before {
-            content: "Field Description";
+          p[data-placeholder]:empty:before {
+            content: attr(data-placeholder);
             color: #999999;
+            pointer-events: none;
           }
         `}
       </style>

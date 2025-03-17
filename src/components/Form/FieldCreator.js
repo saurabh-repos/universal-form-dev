@@ -34,7 +34,7 @@ const FieldCreator = ({ fieldIndex, formId, selectedFieldId, setSelectedFieldId,
       onClick={() => setSelectedFieldId(fieldIndex)}
     >
       <FieldName fieldIndex={fieldIndex} formId={formId} tag={tag} />
-      <FieldDescription tag={tag} />
+      <FieldDescription fieldIndex={fieldIndex} formId={formId} tag={tag} />
       {renderFieldType()}
       <FieldToolbar selectedType={fieldType} setSelectedType={setFieldType} />
     </div>
