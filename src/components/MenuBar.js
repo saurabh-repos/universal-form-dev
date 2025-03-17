@@ -8,7 +8,11 @@ import { RiArrowGoBackFill, RiArrowGoForwardFill } from "react-icons/ri";
 import { IoEyeOutline } from "react-icons/io5";
 import { IoMdLink } from "react-icons/io";
 import { TbColorSwatch } from "react-icons/tb";
-import { setActiveMainMenu, setActivePath } from "@/redux/store/slices/menuSlice";
+import {
+  setActiveMainMenu,
+  setActivePath,
+} from "@/redux/store/slices/menuSlice";
+import { BiSave } from "react-icons/bi";
 
 const MenuBar = () => {
   const dispatch = useDispatch();
@@ -16,10 +20,11 @@ const MenuBar = () => {
   const activeMainMenu = useSelector((state) => state.menu.activeMainMenu);
   const activeFormId = useSelector((state) => state.menu.activeFormId);
   const activePath = useSelector((state) => state.menu.activePath);
+  const formChanges = useSelector((state) => state.form?.formChanges[activeFormId]); // Update this line
 
   const handleMenuClick = (menuId) => {
     dispatch(setActiveMainMenu(menuId));
-    dispatch(setActivePath(activeFormId))
+    dispatch(setActivePath(activeFormId));
   };
 
   useEffect(() => {
@@ -54,6 +59,7 @@ const MenuBar = () => {
       </div>
       <div className="w-[7%] ml-[1.5%] h-11 bg-white text-[#999999] flex items-center justify-center space-x-1 border rounded-2xl border-black">
         <IoEyeOutline className="text-black cursor-pointer" />
+        {formChanges && <BiSave className="text-black cursor-pointer" />}
         <span className="text-black">|</span>
         <IoMdLink className="text-black cursor-pointer" />
       </div>

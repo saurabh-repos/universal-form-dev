@@ -84,7 +84,7 @@ const Sidebar = () => {
                 />
               ) : (
                 <h3
-                  onDoubleClick={() => handleEditClick(form)}
+                  // onDoubleClick={() => handleEditClick(form)}
                   onClick={() => {
                     console.log(form);
                     dispatch(toggleSubItems(form.id));

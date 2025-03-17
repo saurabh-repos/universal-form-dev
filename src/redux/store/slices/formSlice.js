@@ -12,12 +12,18 @@ const initialState = {
   forms: {},
   isLoading: false,
   error: null,
+  formChanges: {}, // Update this line
 };
 
 const formSlice = createSlice({
   name: "form",
   initialState,
-  reducers: {},
+  reducers: {
+    setFormChanges: (state, action) => { // Update this reducer
+      const { formId, hasChanges } = action.payload;
+      state.formChanges[formId] = hasChanges;
+    },
+  },
   extraReducers: (builder) => {
     builder
       // Fetch Forms
@@ -46,6 +52,7 @@ const formSlice = createSlice({
       .addCase(createForm.fulfilled, (state, action) => {
         state.isLoading = false;
         state.forms[action.payload.data._id] = action.payload.data;
+        state.formChanges[action.payload.data._id] = false; // Reset formChanges
         toast.success("Form created successfully!");
       })
       .addCase(createForm.rejected, (state, action) => {
@@ -60,6 +67,7 @@ const formSlice = createSlice({
       .addCase(updateForm.fulfilled, (state, action) => {
         state.isLoading = false;
         state.forms[action.payload.data._id] = action.payload.data;
+        state.formChanges[action.payload.data._id] = false; // Reset formChanges
         toast.success("Form updated successfully!");
       })
       .addCase(updateForm.rejected, (state, action) => {
@@ -74,6 +82,7 @@ const formSlice = createSlice({
       .addCase(deleteForm.fulfilled, (state, action) => {
         state.isLoading = false;
         delete state.forms[action.payload];
+        delete state.formChanges[action.payload]; // Remove formChanges entry
         toast.success("Form deleted successfully!");
       })
       .addCase(deleteForm.rejected, (state, action) => {
@@ -83,4 +92,5 @@ const formSlice = createSlice({
   },
 });
 
+export const { setFormChanges } = formSlice.actions; // Export the updated action
 export default formSlice.reducer;
