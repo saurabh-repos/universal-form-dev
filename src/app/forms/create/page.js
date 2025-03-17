@@ -9,6 +9,7 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchForms, updateForm } from "@/redux/asyncActions/formActions";
 import { setForms } from "@/redux/store/slices/sidebarSlice";
 import { newTag } from "@/constants/newForm";
+import { setFormChanges } from "@/redux/store/slices/formSlice";
 
 const CreateFormPage = () => {
   const searchParams = useSearchParams();
@@ -57,6 +58,7 @@ const CreateFormPage = () => {
 
     setFormState(updatedForm);
     dispatch(updateForm({ id, updates: updatedForm }));
+    dispatch(setFormChanges({ formId: id, hasChanges: true }));
   };
 
   if (!formState) return <p>Loading...</p>;
