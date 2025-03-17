@@ -1,12 +1,15 @@
 "use client";
 import React, { useRef, useState } from "react";
 import TextFormatter from "./TextFormatter";
+import { useDispatch } from "react-redux";
+import { updateForm } from "@/redux/asyncActions/formActions";
 
-function FieldName() {
+function FieldName({ fieldIndex, formId, tag }) {
   const editorRef = useRef(null);
   const containerRef = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [hasText, setHasText] = useState(false);
+  const [hasText, setHasText] = useState(!!tag.title);
+  const dispatch = useDispatch();
 
   const handleFieldNameEdit = () => {
     setIsEditing(true);
@@ -18,12 +21,17 @@ function FieldName() {
       const text = editorRef.current?.innerText.trim();
       setHasText(text.length > 0);
       setIsEditing(false);
+      saveFieldName(text);
     }
   };
 
   const handleInput = () => {
     const text = editorRef.current?.innerText.trim();
     setHasText(text.length > 0);
+  };
+
+  const saveFieldName = (name) => {
+    dispatch(updateForm({ id: formId, updates: { [`sections[0].tags[${fieldIndex}].title`]: name } }));
   };
 
   const applyStyle = (command, value = null) => {
@@ -50,7 +58,7 @@ function FieldName() {
           hasText ? "text-black" : "text-[#999999]"
         }`}
       >
-        {hasText ? "" : "Field Name"}
+        {hasText ? tag.title : "Field Name"}
       </p>
 
       {isEditing && (

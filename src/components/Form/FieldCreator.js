@@ -8,8 +8,8 @@ import Checkbox from "./FieldType/Checkbox";
 import Dropdown from "./FieldType/Dropdown";
 import { fieldTypeOptions } from "@/utils/fieldTypeOptions";
 
-const FieldCreator = ({ fieldId, selectedFieldId, setSelectedFieldId }) => {
-  const [fieldType, setFieldType] = useState(fieldTypeOptions[2]);
+const FieldCreator = ({ fieldIndex, formId, selectedFieldId, setSelectedFieldId, tag }) => {
+  const [fieldType, setFieldType] = useState(fieldTypeOptions.find(option => option.value === tag.type) || fieldTypeOptions[2]);
 
   const renderFieldType = () => {
     switch (fieldType.value) {
@@ -25,15 +25,16 @@ const FieldCreator = ({ fieldId, selectedFieldId, setSelectedFieldId }) => {
         return null;
     }
   };
+
   return (
     <div
       className={`w-[80%] border border-black rounded-2xl max-h-max gap-4 cursor-pointer ${
-        selectedFieldId === fieldId ? "border-black border-2" : ""
+        selectedFieldId === fieldIndex ? "border-black border-2" : ""
       }`}
-      onClick={() => setSelectedFieldId(fieldId)}
+      onClick={() => setSelectedFieldId(fieldIndex)}
     >
-      <FieldName />
-      <FieldDescription />
+      <FieldName fieldIndex={fieldIndex} formId={formId} tag={tag} />
+      <FieldDescription tag={tag} />
       {renderFieldType()}
       <FieldToolbar selectedType={fieldType} setSelectedType={setFieldType} />
     </div>

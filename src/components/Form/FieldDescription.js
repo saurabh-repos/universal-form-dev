@@ -2,11 +2,11 @@
 import React, { useRef, useState } from "react";
 import TextFormatter from "./TextFormatter";
 
-function FieldDescription() {
+function FieldDescription({ tag }) {
   const editorRef = useRef(null);
   const containerRef = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
-  const [hasText, setHasText] = useState(false);
+  const [hasText, setHasText] = useState(!!tag.description);
 
   const handleFieldNameEdit = () => {
     setIsEditing(true);
@@ -50,7 +50,7 @@ function FieldDescription() {
           hasText ? "text-black" : "text-[#999999]"
         }`}
       >
-        {hasText ? "" : "Field Description"}
+        {hasText ? tag.description : "Field Description"}
       </p>
 
       {isEditing && (

@@ -59,7 +59,7 @@ const formSlice = createSlice({
       })
       .addCase(updateForm.fulfilled, (state, action) => {
         state.isLoading = false;
-        state.forms[action.payload.data._id] = action.payload;
+        state.forms[action.payload.data._id] = action.payload.data;
         toast.success("Form updated successfully!");
       })
       .addCase(updateForm.rejected, (state, action) => {
@@ -82,6 +82,5 @@ const formSlice = createSlice({
       });
   },
 });
-
 
 export default formSlice.reducer;
