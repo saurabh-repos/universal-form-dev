@@ -1,25 +1,30 @@
-"use client";
-import React, { useState } from "react";
+import React from "react";
+import { useDispatch, useSelector } from "react-redux";
 import { IoIosCheckboxOutline } from "react-icons/io";
 import { RxCross2 } from "react-icons/rx";
+import { addTagOption, removeTagOption, updateTagOption } from "@/redux/store/slices/formSlice";
 
-function Checkbox() {
-  const [options, setOptions] = useState([{ id: Date.now(), text: "" }]);
+function Checkbox({ formId, sectionIndex, tagIndex }) {
+  const dispatch = useDispatch();
 
-  const handleOptionChange = (id, text) => {
-    setOptions(options.map((option) => (option.id === id ? { ...option, text } : option)));
+  const options = useSelector(
+    (state) => state.forms.tempForms[formId]?.sections[sectionIndex]?.tags[tagIndex]?.options || []
+  );
+
+  const handleOptionChange = (optionId, value) => {
+    dispatch(updateTagOption({ formId, sectionIndex, tagIndex, optionId, value }));
   };
 
   const addOption = () => {
-    setOptions([...options, { id: Date.now(), text: "" }]);
+    dispatch(addTagOption({ formId, sectionIndex, tagIndex, option: { id: Date.now(), value: "" } }));
   };
 
   const addOtherOption = () => {
-    setOptions([...options, { id: Date.now(), text: "Other" }]);
+    dispatch(addTagOption({ formId, sectionIndex, tagIndex, option: { id: Date.now(), value: "Other" } }));
   };
 
-  const removeOption = (id) => {
-    setOptions(options.filter((option) => option.id !== id));
+  const removeOption = (optionId) => {
+    dispatch(removeTagOption({ formId, sectionIndex, tagIndex, optionId }));
   };
 
   return (
@@ -29,7 +34,7 @@ function Checkbox() {
           <IoIosCheckboxOutline className="text-base text-[#999999]" />
           <input
             type="text"
-            value={option.text}
+            value={option.value}
             onChange={(e) => handleOptionChange(option.id, e.target.value)}
             className="flex-1 px-2 outline-none rounded-md text-base text-black"
             placeholder="Option"
