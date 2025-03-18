@@ -36,7 +36,7 @@ export default async function RootLayout({ children }) {
           <ClientProvider>
             <div className="w-full flex h-screen">
               <Sidebar />
-              <div className="flex flex-col flex-grow pl-12 pt-4 pr-8">
+              <div className="flex flex-col flex-grow pl-12 py-4 pr-8">
                 <MenuBar />
                 <main className="flex-1 h-screen max-h-screen overflow-y-auto">{children}</main>
               </div>
