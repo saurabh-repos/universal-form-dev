@@ -58,11 +58,12 @@ export const saveFormToServer = createAsyncThunk(
   "form/saveFormToServer",
   async (formId, { getState, rejectWithValue }) => {
     try {
-      console.log("formId", formId);
       const state = getState();
-      console.log("state", state);
-      const updates = state.forms.tempForms[formId];
-      console.log("updates", updates);
+      const updates = { ...state.forms.tempForms[formId] };
+      delete updates.createdAt;
+      delete updates.updatedAt;
+      delete updates.__v;
+      delete updates._id;
       const response = await userRequest.put(`/admin/updateForm?id=${formId}`, updates);
       return response.data;
     } catch (error) {

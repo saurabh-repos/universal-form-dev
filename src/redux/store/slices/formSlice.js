@@ -14,6 +14,7 @@ const initialState = {
   error: null,
   formChanges: {},
   tempForms: {},
+  activeFormId:null
 };
 
 const formSlice = createSlice({
@@ -123,6 +124,9 @@ const formSlice = createSlice({
         state.formChanges[formId] = true;
       }
     },
+    setActiveFormId: (state, action) => {
+      state.activeFormId = action.payload;
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -183,7 +187,8 @@ export const {
   updateTagOption,
   updateTagRequired,
   updateFormTitle, 
-  updateFormDescription 
+  updateFormDescription,
+  setActiveFormId // Add this line
 } = formSlice.actions;
 
 export default formSlice.reducer;

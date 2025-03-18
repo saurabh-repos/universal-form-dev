@@ -10,11 +10,11 @@ import { IoMdLink } from "react-icons/io";
 import { TbColorSwatch } from "react-icons/tb";
 import {
   setActiveMainMenu,
-  setActivePath,
+  setActivePath
 } from "@/redux/store/slices/menuSlice";
 import { BiSave } from "react-icons/bi";
 import { saveFormToServer } from "@/redux/asyncActions/formActions";
-
+import { setActiveFormId } from "@/redux/store/slices/formSlice";
 
 const MenuBar = () => {
   const dispatch = useDispatch();
@@ -35,6 +35,11 @@ const MenuBar = () => {
     if (formChanges) {
       dispatch(saveFormToServer(activeFormId));
     }
+  };
+
+  const handleViewClick = () => {
+    dispatch(setActiveFormId(activeFormId));
+    router.push(`/forms/view`);
   };
 
   useEffect(() => {
@@ -71,7 +76,7 @@ const MenuBar = () => {
         {formChanges ? (
           <BiSave className="text-black cursor-pointer" onClick={handleSaveClick} />
         ) : (
-          <IoEyeOutline className="text-black cursor-pointer" />
+          <IoEyeOutline className="text-black cursor-pointer" onClick={handleViewClick} />
         )}
         <span className="text-black">|</span>
         <IoMdLink className="text-black cursor-pointer" />
