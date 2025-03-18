@@ -109,12 +109,18 @@ const formSlice = createSlice({
       if (form) {
         form.title = title;
       }
+      if (!state.formChanges[formId]) {
+        state.formChanges[formId] = true;
+      }
     },
     updateFormDescription(state, action) {
       const { formId, description } = action.payload;
       const form = state.tempForms[formId];
       if (form) {
         form.description = description;
+      }
+      if (!state.formChanges[formId]) {
+        state.formChanges[formId] = true;
       }
     },
   },
