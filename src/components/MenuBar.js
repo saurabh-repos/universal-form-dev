@@ -13,6 +13,8 @@ import {
   setActivePath,
 } from "@/redux/store/slices/menuSlice";
 import { BiSave } from "react-icons/bi";
+import { saveFormToServer } from "@/redux/asyncActions/formActions";
+
 
 const MenuBar = () => {
   const dispatch = useDispatch();
@@ -27,6 +29,12 @@ const MenuBar = () => {
   const handleMenuClick = (menuId) => {
     dispatch(setActiveMainMenu(menuId));
     dispatch(setActivePath(activeFormId));
+  };
+
+  const handleSaveClick = () => {
+    if (formChanges) {
+      dispatch(saveFormToServer(activeFormId));
+    }
   };
 
   useEffect(() => {
@@ -61,7 +69,7 @@ const MenuBar = () => {
       </div>
       <div className="w-[7%] ml-[1.5%] h-11 bg-white text-[#999999] flex items-center justify-center space-x-1 border rounded-2xl border-black">
         {formChanges ? (
-          <BiSave className="text-black cursor-pointer" />
+          <BiSave className="text-black cursor-pointer" onClick={handleSaveClick} />
         ) : (
           <IoEyeOutline className="text-black cursor-pointer" />
         )}
