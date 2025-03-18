@@ -1,11 +1,6 @@
-import React, { useState } from 'react';
+import React from 'react';
 
-function ToggleSwitch() {
-  const [isOn, setIsOn] = useState(false);
-
-  const toggleSwitch = () => {
-    setIsOn(!isOn);
-  };
+function ToggleSwitch({ isOn,toggleSwitch }) {
 
   return (
     <div className="flex items-center">

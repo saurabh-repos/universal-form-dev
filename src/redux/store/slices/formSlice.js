@@ -65,6 +65,7 @@ const formSlice = createSlice({
     updateTagType: (state, action) => {
       const { formId, sectionIndex, tagIndex, type } = action.payload;
       state.tempForms[formId].sections[sectionIndex].tags[tagIndex].type = type;
+      state.tempForms[formId].sections[sectionIndex].tags[tagIndex].options = [];
       if (!state.formChanges[formId]) {
         state.formChanges[formId] = true;
       }
@@ -127,6 +128,21 @@ const formSlice = createSlice({
     setActiveFormId: (state, action) => {
       state.activeFormId = action.payload;
     },
+    deleteTag: (state, action) => {
+      const { formId, sectionIndex, tagIndex } = action.payload;
+      state.tempForms[formId].sections[sectionIndex].tags.splice(tagIndex, 1);
+      if (!state.formChanges[formId]) {
+        state.formChanges[formId] = true;
+      }
+    },
+    duplicateTag: (state, action) => {
+      const { formId, sectionIndex, tagIndex } = action.payload;
+      const tag = state.tempForms[formId].sections[sectionIndex].tags[tagIndex];
+      state.tempForms[formId].sections[sectionIndex].tags.splice(tagIndex + 1, 0, tag);
+      if (!state.formChanges[formId]) {
+        state.formChanges[formId] = true;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -188,7 +204,9 @@ export const {
   updateTagRequired,
   updateFormTitle, 
   updateFormDescription,
-  setActiveFormId // Add this line
+  setActiveFormId,
+  deleteTag,
+  duplicateTag
 } = formSlice.actions;
 
 export default formSlice.reducer;
