@@ -48,14 +48,14 @@ const ViewField = ({ tag }) => {
     const inputValue = e.target.value;
     setValue(inputValue);
 
-    if (tag?.required && !inputValue) {
-      setError("This field is required");
-      return;
-    }
+    // if (tag?.required && !inputValue) {
+    //   setError("This field is required");
+    //   return;
+    // }
 
-    if (tag?.type === "short_answer" && validationRule.condition) {
-      validateNumber(inputValue);
-    }
+    // if (tag?.type === "short_answer" && validationRule.condition) {
+    //   validateNumber(inputValue);
+    // }
 
     // if (onInputChange) {
     //   //   onInputChange(tag._id, inputValue);
