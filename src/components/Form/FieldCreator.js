@@ -8,19 +8,19 @@ import Checkbox from "./FieldType/Checkbox";
 import Dropdown from "./FieldType/Dropdown";
 import { fieldTypeOptions } from "@/utils/fieldTypeOptions";
 
-const FieldCreator = ({ fieldIndex, formId, selectedFieldId, setSelectedFieldId, tag }) => {
+const FieldCreator = ({ tagIndex, sectionIndex, formId, selectedFieldId, setSelectedFieldId, tag }) => {
   const [fieldType, setFieldType] = useState(fieldTypeOptions.find(option => option.value === tag.type) || fieldTypeOptions[2]);
 
   const renderFieldType = () => {
     switch (fieldType.value) {
       case "multiple_choice":
-        return <MultipleChoice />;
+        return <MultipleChoice tagIndex={tagIndex} sectionIndex={sectionIndex} formId={formId} tag={tag} />;
       case "checkboxes":
-        return <Checkbox />;
+        return <Checkbox tagIndex={tagIndex} sectionIndex={sectionIndex} formId={formId} tag={tag} />;
       case "dropdown":
-        return <Dropdown />;
+        return <Dropdown tagIndex={tagIndex} sectionIndex={sectionIndex} formId={formId} tag={tag} />;
       case "short_answer":
-        return <ShortAnswer />;
+        return <ShortAnswer tagIndex={tagIndex} sectionIndex={sectionIndex} formId={formId} tag={tag} />;
       default:
         return null;
     }
@@ -29,14 +29,14 @@ const FieldCreator = ({ fieldIndex, formId, selectedFieldId, setSelectedFieldId,
   return (
     <div
       className={`w-[80%] border border-black rounded-2xl max-h-max gap-4 cursor-pointer ${
-        selectedFieldId === fieldIndex ? "border-black border-2" : ""
+        selectedFieldId === tagIndex ? "border-black border-2" : ""
       }`}
-      onClick={() => setSelectedFieldId(fieldIndex)}
+      onClick={() => setSelectedFieldId(tagIndex)}
     >
-      <FieldName fieldIndex={fieldIndex} formId={formId} tag={tag} />
-      <FieldDescription fieldIndex={fieldIndex} formId={formId} tag={tag} />
+      <FieldName tagIndex={tagIndex} sectionIndex={sectionIndex} formId={formId} tag={tag} />
+      <FieldDescription tagIndex={tagIndex} sectionIndex={sectionIndex} formId={formId} tag={tag} />
       {renderFieldType()}
-      <FieldToolbar selectedType={fieldType} setSelectedType={setFieldType} />
+      <FieldToolbar selectedType={fieldType} setSelectedType={setFieldType} tagIndex={tagIndex} sectionIndex={sectionIndex} formId={formId}/>
     </div>
   );
 };

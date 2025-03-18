@@ -20,7 +20,9 @@ const MenuBar = () => {
   const activeMainMenu = useSelector((state) => state.menu.activeMainMenu);
   const activeFormId = useSelector((state) => state.menu.activeFormId);
   const activePath = useSelector((state) => state.menu.activePath);
-  const formChanges = useSelector((state) => state.form?.formChanges[activeFormId]); // Update this line
+  const formChanges = useSelector(
+    (state) => state.forms?.formChanges[activeFormId]
+  );
 
   const handleMenuClick = (menuId) => {
     dispatch(setActiveMainMenu(menuId));
@@ -58,8 +60,11 @@ const MenuBar = () => {
         <RiArrowGoForwardFill className="text-black cursor-pointer" />
       </div>
       <div className="w-[7%] ml-[1.5%] h-11 bg-white text-[#999999] flex items-center justify-center space-x-1 border rounded-2xl border-black">
-        <IoEyeOutline className="text-black cursor-pointer" />
-        {formChanges && <BiSave className="text-black cursor-pointer" />}
+        {formChanges ? (
+          <BiSave className="text-black cursor-pointer" />
+        ) : (
+          <IoEyeOutline className="text-black cursor-pointer" />
+        )}
         <span className="text-black">|</span>
         <IoMdLink className="text-black cursor-pointer" />
       </div>

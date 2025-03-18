@@ -52,3 +52,18 @@ export const deleteForm = createAsyncThunk(
     }
   }
 );
+
+
+export const saveFormToServer = createAsyncThunk(
+  "form/saveFormToServer",
+  async (formId, { getState, rejectWithValue }) => {
+    try {
+      const state = getState();
+      const updates = state.form.tempForms[formId];
+      const response = await userRequest.put(`/admin/updateForm?id=${formId}`, updates);
+      return response.data;
+    } catch (error) {
+      return rejectWithValue("Failed to save form to server.");
+    }
+  }
+);

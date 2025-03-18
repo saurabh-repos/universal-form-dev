@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect, useState, useMemo } from "react";
 import FieldCreator from "@/components/Form/FieldCreator";
 import FormHeader from "@/components/Form/FormHeader";
 import FormTools from "@/components/Form/FormTools";
@@ -9,15 +9,17 @@ import { useDispatch, useSelector } from "react-redux";
 import { fetchForms, updateForm } from "@/redux/asyncActions/formActions";
 import { setForms } from "@/redux/store/slices/sidebarSlice";
 import { newTag } from "@/constants/newForm";
-import { setFormChanges } from "@/redux/store/slices/formSlice";
+import { addTag } from "@/redux/store/slices/formSlice";
 
 const CreateFormPage = () => {
   const searchParams = useSearchParams();
   const dispatch = useDispatch();
   const id = searchParams.get("id");
-  // const form = useSelector((state) => state.form.forms[id]);
+
+  const formState = useSelector((state) => state.forms.tempForms[id]);
   const [selectedFieldId, setSelectedFieldId] = useState(-1);
-  const [formState, setFormState] = useState(null);
+
+  const tempForm = useMemo(() => formState, [formState]);
 
   useEffect(() => {
     dispatch(fetchForms())
@@ -25,43 +27,14 @@ const CreateFormPage = () => {
       .then((data) => {
         dispatch(setForms(data));
       });
-  }, []);
+  }, [dispatch]);
 
-  useEffect(() => {
-    if (id) {
-      dispatch(fetchForms())
-        .unwrap()
-        .then((data) => {
-          dispatch(setForms(data));
-          const foundForm = data.find((f) => f._id === id);
-          if (foundForm) {
-            setFormState(foundForm);
-          }
-        });
-    }
-  }, [id]);
-
-  const addField = () => {
-    if (!formState) return;
-    const updatedForm = {
-      ...formState,
-      sections: formState.sections.map((section, index) => {
-        if (index === 0) {
-          return {
-            ...section,
-            tags: [...section.tags, newTag],
-          };
-        }
-        return section;
-      }),
-    };
-
-    setFormState(updatedForm);
-    dispatch(updateForm({ id, updates: updatedForm }));
-    dispatch(setFormChanges({ formId: id, hasChanges: true }));
+  const addField = (sectionIndex) => {
+    if (!tempForm) return;
+    dispatch(addTag({ formId: id, sectionIndex, tag: newTag }));
   };
 
-  if (!formState) return <p>Loading...</p>;
+  if (!tempForm) return <p>Loading...</p>;
 
   return (
     <div className="flex flex-col gap-2">
@@ -70,27 +43,32 @@ const CreateFormPage = () => {
         onClick={() => setSelectedFieldId(-1)}
       >
         <FormHeader
-          fieldIndex={-1}
+          tagIndex={-1}
           selectedFieldId={selectedFieldId}
           setSelectedFieldId={setSelectedFieldId}
         />
-        {selectedFieldId === -1 && <FormTools addField={addField} />}
+        {selectedFieldId === -1 && <FormTools addField={() => addField(0)} />}
       </div>
 
-      <div className="flex flex-col gap-6 mt-4">
-        {formState.sections[0]?.tags.map((tag, index) => (
-          <div key={index} className="flex gap-4">
-            <FieldCreator
-              fieldIndex={index}
-              formId={id}
-              selectedFieldId={selectedFieldId}
-              setSelectedFieldId={setSelectedFieldId}
-              tag={tag}
-            />
-            {selectedFieldId === index && <FormTools addField={addField} />}
-          </div>
-        ))}
-      </div>
+      {tempForm.sections.map((section, sectionIndex) => (
+        <div key={sectionIndex} className="flex flex-col gap-6 mt-4">
+          {section.tags.map((tag, index) => (
+            <div key={index} className="flex gap-4">
+              <FieldCreator
+                tagIndex={index}
+                sectionIndex={sectionIndex}
+                formId={id}
+                selectedFieldId={selectedFieldId}
+                setSelectedFieldId={setSelectedFieldId}
+                tag={tag}
+              />
+              {selectedFieldId === index && (
+                <FormTools addField={() => addField(sectionIndex)} />
+              )}
+            </div>
+          ))}
+        </div>
+      ))}
     </div>
   );
 };

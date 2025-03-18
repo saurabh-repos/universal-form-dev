@@ -1,12 +1,15 @@
 "use client";
 import React, { useRef, useState } from "react";
 import TextFormatter from "./TextFormatter";
+import { updateTagDescription } from "@/redux/store/slices/formSlice";
+import { useDispatch } from "react-redux";
 
-function FieldDescription({ tag }) {
+function FieldDescription({ tagIndex,sectionIndex, formId, tag  }) {
   const editorRef = useRef(null);
   const containerRef = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
   const [hasText, setHasText] = useState(!!tag.description);
+  const dispatch =  useDispatch()
 
   const handleFieldNameEdit = () => {
     setIsEditing(true);
@@ -21,8 +24,13 @@ function FieldDescription({ tag }) {
         editorRef.current.innerHTML = ""; // Ensure it's truly empty
       }
       setIsEditing(false);
+      saveFieldDescription(text);
     }
   };
+
+   const saveFieldDescription = (description) => {
+      dispatch(updateTagDescription({ formId,sectionIndex,tagIndex, description } ));
+    };
 
   const handleInput = () => {
     const text = editorRef.current?.innerText.trim();

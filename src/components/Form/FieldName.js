@@ -3,8 +3,9 @@ import React, { useRef, useState } from "react";
 import TextFormatter from "./TextFormatter";
 import { useDispatch } from "react-redux";
 import { updateForm } from "@/redux/asyncActions/formActions";
+import { updateTagName } from "@/redux/store/slices/formSlice";
 
-function FieldName({ fieldIndex, formId, tag }) {
+function FieldName({ tagIndex,sectionIndex, formId, tag }) {
   const editorRef = useRef(null);
   const containerRef = useRef(null);
   const [isEditing, setIsEditing] = useState(false);
@@ -21,10 +22,10 @@ function FieldName({ fieldIndex, formId, tag }) {
       const text = editorRef.current?.innerText.trim();
       setHasText(text.length > 0);
       if (!text.length) {
-        editorRef.current.innerHTML = ""; // Ensure it's truly empty
+        editorRef.current.innerHTML = ""; 
       }
       setIsEditing(false);
-      // saveFieldName(text);
+      saveFieldName(text);
     }
   };
 
@@ -34,7 +35,8 @@ function FieldName({ fieldIndex, formId, tag }) {
   };
 
   const saveFieldName = (name) => {
-    dispatch(updateForm({ id: formId, updates: { [`sections[0].tags[${fieldIndex}].title`]: name } }));
+    // dispatch(updateForm({ id: formId, updates: { [`sections[0].tags[${tagIndex}].title`]: name } }));
+    dispatch(updateTagName({ formId,sectionIndex,tagIndex, name } ));
   };
 
   const applyStyle = (command, value = null) => {
