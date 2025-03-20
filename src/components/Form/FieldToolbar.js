@@ -69,7 +69,7 @@ function FieldToolbar({
             title="Delete field"
             onClick={handleDelete}
           />
-          <FieldModal />
+          <FieldModal tagIndex={tagIndex} sectionIndex={sectionIndex} formId={formId}/>
         </div>
       </div>
     </div>

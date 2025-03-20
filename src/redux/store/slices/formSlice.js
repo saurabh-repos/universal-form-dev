@@ -14,7 +14,7 @@ const initialState = {
   error: null,
   formChanges: {},
   tempForms: {},
-  activeFormId:null
+  activeFormId: null,
 };
 
 const formSlice = createSlice({
@@ -24,7 +24,7 @@ const formSlice = createSlice({
     setFormChanges: (state, action) => {
       const { formId, hasChanges } = action.payload;
       state.formChanges[formId] = hasChanges;
-    },    
+    },
     // Create a new section
     addSection: (state, action) => {
       const { formId, section } = action.payload;
@@ -33,7 +33,7 @@ const formSlice = createSlice({
         state.formChanges[formId] = true;
       }
     },
-    
+
     // Create a new tag (question)
     addTag: (state, action) => {
       const { formId, sectionIndex, tag } = action.payload;
@@ -42,65 +42,76 @@ const formSlice = createSlice({
         state.formChanges[formId] = true;
       }
     },
-    
+
     // Update tag name
     updateTagName: (state, action) => {
       const { formId, sectionIndex, tagIndex, name } = action.payload;
-      state.tempForms[formId].sections[sectionIndex].tags[tagIndex].title = name;
+      state.tempForms[formId].sections[sectionIndex].tags[tagIndex].title =
+        name;
       if (!state.formChanges[formId]) {
         state.formChanges[formId] = true;
       }
     },
-    
+
     // Update tag description
     updateTagDescription: (state, action) => {
       const { formId, sectionIndex, tagIndex, description } = action.payload;
-      state.tempForms[formId].sections[sectionIndex].tags[tagIndex].description = description;
+      state.tempForms[formId].sections[sectionIndex].tags[
+        tagIndex
+      ].description = description;
       if (!state.formChanges[formId]) {
         state.formChanges[formId] = true;
       }
     },
-    
+
     // Update tag type
     updateTagType: (state, action) => {
       const { formId, sectionIndex, tagIndex, type } = action.payload;
       state.tempForms[formId].sections[sectionIndex].tags[tagIndex].type = type;
-      state.tempForms[formId].sections[sectionIndex].tags[tagIndex].options = [];
+      state.tempForms[formId].sections[sectionIndex].tags[tagIndex].options =
+        [];
       if (!state.formChanges[formId]) {
         state.formChanges[formId] = true;
       }
     },
-    
+
     // Add an option to a tag
     addTagOption: (state, action) => {
       const { formId, sectionIndex, tagIndex, option } = action.payload;
-      state.tempForms[formId].sections[sectionIndex].tags[tagIndex].options.push(option);
+      state.tempForms[formId].sections[sectionIndex].tags[
+        tagIndex
+      ].options.push(option);
       if (!state.formChanges[formId]) {
         state.formChanges[formId] = true;
       }
     },
-    
+
     // Remove an option from a tag
     removeTagOption: (state, action) => {
       const { formId, sectionIndex, tagIndex, optionIndex } = action.payload;
-      state.tempForms[formId].sections[sectionIndex].tags[tagIndex].options.splice(optionIndex, 1);
+      state.tempForms[formId].sections[sectionIndex].tags[
+        tagIndex
+      ].options.splice(optionIndex, 1);
       if (!state.formChanges[formId]) {
         state.formChanges[formId] = true;
       }
     },
 
     updateTagOption: (state, action) => {
-      const { formId, sectionIndex, tagIndex, optionId, value } = action.payload;
-      const options = state.tempForms[formId].sections[sectionIndex].tags[tagIndex].options;
+      const { formId, sectionIndex, tagIndex, optionId, value } =
+        action.payload;
+      const options =
+        state.tempForms[formId].sections[sectionIndex].tags[tagIndex].options;
       const option = options.find((opt) => opt.id === optionId);
       if (option) option.value = value;
       state.formChanges[formId] = true;
-    },    
-    
+    },
+
     // Update required status of a tag
     updateTagRequired: (state, action) => {
       const { formId, sectionIndex, tagIndex, required } = action.payload;
-      state.tempForms[formId].sections[sectionIndex].tags[tagIndex].required = required;
+      state.tempForms[formId].sections[sectionIndex].tags[tagIndex].required =
+        required;
       if (!state.formChanges[formId]) {
         state.formChanges[formId] = true;
       }
@@ -138,7 +149,20 @@ const formSlice = createSlice({
     duplicateTag: (state, action) => {
       const { formId, sectionIndex, tagIndex } = action.payload;
       const tag = state.tempForms[formId].sections[sectionIndex].tags[tagIndex];
-      state.tempForms[formId].sections[sectionIndex].tags.splice(tagIndex + 1, 0, tag);
+      state.tempForms[formId].sections[sectionIndex].tags.splice(
+        tagIndex + 1,
+        0,
+        tag
+      );
+      if (!state.formChanges[formId]) {
+        state.formChanges[formId] = true;
+      }
+    },
+    updateTagProperty: (state, action) => {
+      const { formId, sectionIndex, tagIndex, property, value } =
+        action.payload;
+      state.tempForms[formId].sections[sectionIndex].tags[tagIndex][property] =
+        value;
       if (!state.formChanges[formId]) {
         state.formChanges[formId] = true;
       }
@@ -202,11 +226,12 @@ export const {
   removeTagOption,
   updateTagOption,
   updateTagRequired,
-  updateFormTitle, 
+  updateFormTitle,
   updateFormDescription,
   setActiveFormId,
   deleteTag,
-  duplicateTag
+  duplicateTag,
+  updateTagProperty,
 } = formSlice.actions;
 
 export default formSlice.reducer;
