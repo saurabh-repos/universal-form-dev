@@ -3,7 +3,7 @@
   "version": "0.1.0",
   "private": true,
   "scripts": {
-    "dev": "copy .env.dev .env.local && next dev",
+    "dev": "copy .env.dev .env.local && next dev -p 5000",
     "dev:stage": "copy .env.stage .env.local && next dev",
     "dev:prod": "copy .env.prod .env.local && next dev",
     "build": "next build",
