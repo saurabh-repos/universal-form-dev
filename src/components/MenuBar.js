@@ -39,7 +39,8 @@ const MenuBar = () => {
 
   const handleViewClick = () => {
     dispatch(setActiveFormId(activeFormId));
-    router.push(`/forms/view`);
+    // router.push(`/forms/view`);
+    window.open(`/forms/view?id=${activeFormId}`, "_blank");
   };
 
   useEffect(() => {
