@@ -40,6 +40,7 @@ const MenuBar = () => {
   const handleViewClick = () => {
     dispatch(setActiveFormId(activeFormId));
     // router.push(`/forms/view`);
+    localStorage.setItem("activePath", `/forms/view?id=${activeFormId}`);
     window.open(`/forms/view?id=${activeFormId}`, "_blank");
   };
 

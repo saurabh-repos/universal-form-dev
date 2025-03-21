@@ -2,9 +2,10 @@
 
 import ViewForm from "@/components/ViewForm/ViewForm";
 import { userRequest } from "@/lib/requestMethod";
+import { setActivePath } from "@/redux/store/slices/menuSlice";
 import { useSearchParams } from "next/navigation";
 import React, { useEffect, useState } from "react";
-import { useSelector } from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
 
 const Page = () => {
   const searchParams = useSearchParams();
@@ -19,6 +20,12 @@ const Page = () => {
   useEffect(() => {
     getFormById();
   }, [id]);
+
+  const activePath = localStorage.getItem("activePath");
+  const dispatch = useDispatch();
+  useEffect(() => {
+    dispatch(setActivePath({ viewPage: true, activePath: activePath }));
+  }, [activePath]);
 
   return form ? <ViewForm form={form} /> : <p>Loading...</p>;
 };

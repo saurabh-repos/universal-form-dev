@@ -19,6 +19,7 @@ const validationCategories = [
 
 function ShortParaValidation({ tagIndex, sectionIndex, formId }) {
   const dispatch = useDispatch();
+  const [isFirstRender, setIsFirstRender] = useState(true);
 
   // Get the form state from Redux
   const tagData = useSelector(
@@ -64,6 +65,11 @@ function ShortParaValidation({ tagIndex, sectionIndex, formId }) {
 
   // Update Redux on state change
   useEffect(() => {
+    if (isFirstRender) {
+      setIsFirstRender(false); // Skip the first render
+      return;
+    }
+
     dispatch(
       updateTagValidation({
         formId,

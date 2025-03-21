@@ -21,6 +21,10 @@ const menuSlice = createSlice({
       state.activeFormId = action.payload;
     },
     setActivePath: (state, action) => {
+      if (action.payload.viewPage) {
+        state.activePath = action.payload.activePath;
+        return;
+      }
       const basePath = MAIN_MENU_ITEMS[state.activeMainMenu]?.basePath || "";
       state.activePath = basePath + `?id=${action.payload}`;
     },
