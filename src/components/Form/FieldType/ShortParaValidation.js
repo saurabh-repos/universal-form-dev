@@ -22,12 +22,16 @@ function ShortParaValidation({ tagIndex, sectionIndex, formId }) {
 
   // Get the form state from Redux
   const tagData = useSelector(
-    (state) => state.forms.tempForms?.[formId]?.sections?.[sectionIndex]?.tags?.[tagIndex]
+    (state) =>
+      state.forms.tempForms?.[formId]?.sections?.[sectionIndex]?.tags?.[
+        tagIndex
+      ]
   );
 
   const [selectedCategory, setSelectedCategory] = useState(
-    validationCategories.find((cat) => cat.value === tagData?.validation?.type) ||
-      validationCategories[0]
+    validationCategories.find(
+      (cat) => cat.value === tagData?.validation?.type
+    ) || validationCategories[0]
   );
 
   const getValidationRules = (category) => {
@@ -46,8 +50,9 @@ function ShortParaValidation({ tagIndex, sectionIndex, formId }) {
   };
 
   const [selectedRule, setSelectedRule] = useState(
-    getValidationRules(selectedCategory).find((rule) => rule.value === tagData?.validation?.condition) ||
-      getValidationRules(selectedCategory)[0]
+    getValidationRules(selectedCategory).find(
+      (rule) => rule.value === tagData?.validation?.condition
+    ) || getValidationRules(selectedCategory)[0]
   );
 
   const [validationValues, setValidationValues] = useState({
@@ -91,7 +96,12 @@ function ShortParaValidation({ tagIndex, sectionIndex, formId }) {
             setSelectedCategory(value);
             const newRules = getValidationRules(value);
             setSelectedRule(newRules[0] || null);
-            setValidationValues({ value: "", min: "", max: "", errorMessage: "" });
+            setValidationValues({
+              value: "",
+              min: "",
+              max: "",
+              errorMessage: "",
+            });
           }}
           maxHeight={280}
           maxWidth={180}
@@ -110,7 +120,7 @@ function ShortParaValidation({ tagIndex, sectionIndex, formId }) {
           />
         </div>
 
-        {selectedRule?.value === "between" || selectedRule?.value === "not_between" ? (
+        {["between", "not_between"].includes(selectedRule?.value) ? (
           <div className="text-sm flex-1 flex gap-2">
             <input
               type="number"
@@ -129,11 +139,15 @@ function ShortParaValidation({ tagIndex, sectionIndex, formId }) {
               className="w-1/2 outline-none border-b border-[#999999]"
             />
           </div>
-        ) : (
+        ) : selectedRule?.value === "is_number" ? null : (
           <input
             type={selectedCategory?.value === "number" ? "number" : "text"}
             name="value"
-            placeholder={selectedCategory?.value === "regex" ? "Enter pattern" : "Enter value"}
+            placeholder={
+              selectedCategory?.value === "regex"
+                ? "Enter pattern"
+                : "Enter value"
+            }
             value={validationValues.value}
             onChange={handleInputChange}
             className="w-full outline-none border-b border-[#999999]"
