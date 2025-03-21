@@ -1,7 +1,7 @@
 "use client";
 import React from "react";
 import CustomSelect from "../CustomSelect";
-import { fieldTypeOptions } from "@/utils/fieldTypeOptions";
+import { fieldTypeOptions } from "@/constants/fieldTypeOptions";
 import { useDispatch } from "react-redux";
 import { updateTagType } from "@/redux/store/slices/formSlice";
 

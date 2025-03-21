@@ -6,7 +6,7 @@ import FieldToolbar from "./FieldToolbar";
 import ShortAnswer from "./FieldType/ShortAnswer";
 import Checkbox from "./FieldType/Checkbox";
 import Dropdown from "./FieldType/Dropdown";
-import { fieldTypeOptions } from "@/utils/fieldTypeOptions";
+import { fieldTypeOptions } from "@/constants/fieldTypeOptions";
 import { useSelector } from "react-redux";
 
 const FieldCreator = ({

@@ -7,7 +7,7 @@ import {
   textValidations,
   lengthValidations,
   regexValidations,
-} from "@/utils/validationOptions";
+} from "@/constants/validationOptions";
 import { updateTagValidation } from "@/redux/store/slices/formSlice";
 
 const validationCategories = [
