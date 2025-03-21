@@ -5,8 +5,11 @@ import { BiTrash } from "react-icons/bi";
 import ToggleSwitch from "../ToggleSwitch";
 import FieldModal from "../FieldModal";
 import { useDispatch, useSelector } from "react-redux";
-import { deleteTag, duplicateTag, updateTagRequired } from "@/redux/store/slices/formSlice";
-
+import {
+  deleteTag,
+  duplicateTag,
+  updateTagRequired,
+} from "@/redux/store/slices/formSlice";
 
 function FieldToolbar({
   selectedType,
@@ -49,11 +52,7 @@ function FieldToolbar({
         />
       </div>
       <div className="w-[65%] flex items-center justify-end gap-4">
-        <div
-          className={`flex items-center gap-2 ${
-            required ? "bg-gray-100" : "bg-white"
-          }`}
-        >
+        <div className={`flex items-center gap-2 bg-white`}>
           <span className="text-sm">required</span>
           <ToggleSwitch isOn={required} toggleSwitch={toggleSwitch} />
         </div>
@@ -69,7 +68,11 @@ function FieldToolbar({
             title="Delete field"
             onClick={handleDelete}
           />
-          <FieldModal tagIndex={tagIndex} sectionIndex={sectionIndex} formId={formId}/>
+          <FieldModal
+            tagIndex={tagIndex}
+            sectionIndex={sectionIndex}
+            formId={formId}
+          />
         </div>
       </div>
     </div>
