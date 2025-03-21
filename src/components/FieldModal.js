@@ -59,7 +59,7 @@ function FieldModal({ tagIndex, sectionIndex, formId }) {
       />
 
       {isOpen && (
-        <div className="absolute left-10 -bottom-2 mt-2 w-44 bg-white shadow-lg rounded-lg border p-2">
+        <div className="absolute left-10 -bottom-2 mt-2 w-44 bg-white shadow-lg rounded-lg border p-2 flex flex-col gap-1">
           {items.map((item) => (
             <div
               key={item.id}

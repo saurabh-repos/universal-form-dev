@@ -167,6 +167,20 @@ const formSlice = createSlice({
         state.formChanges[formId] = true;
       }
     },
+    updateTagValidation: (state, action) => {
+      const { formId, sectionIndex, tagIndex, validation } = action.payload;
+
+      const tag =
+        state.tempForms?.[formId]?.sections?.[sectionIndex]?.tags?.[tagIndex];
+
+      if (tag) {
+        tag.validation = {
+          ...tag.validation,
+          ...validation,
+        };
+        state.formChanges[formId] = true;
+      }
+    },
   },
   extraReducers: (builder) => {
     builder
@@ -232,6 +246,7 @@ export const {
   deleteTag,
   duplicateTag,
   updateTagProperty,
+  updateTagValidation
 } = formSlice.actions;
 
 export default formSlice.reducer;

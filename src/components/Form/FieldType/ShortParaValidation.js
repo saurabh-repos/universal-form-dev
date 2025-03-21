@@ -1,12 +1,14 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useDispatch, useSelector } from "react-redux";
 import CustomSelect from "@/components/CustomSelect";
+
 import {
   numberValidations,
   textValidations,
   lengthValidations,
   regexValidations,
 } from "@/utils/validationOptions";
-import { RxCross2 } from "react-icons/rx";
+import { updateTagValidation } from "@/redux/store/slices/formSlice";
 
 const validationCategories = [
   { label: "Number", value: "number" },
@@ -15,8 +17,18 @@ const validationCategories = [
   { label: "Regex", value: "regex" },
 ];
 
-function ShortParaValidation() {
-  const [selectedCategory, setSelectedCategory] = useState(validationCategories[0]);
+function ShortParaValidation({ tagIndex, sectionIndex, formId }) {
+  const dispatch = useDispatch();
+
+  // Get the form state from Redux
+  const tagData = useSelector(
+    (state) => state.forms.tempForms?.[formId]?.sections?.[sectionIndex]?.tags?.[tagIndex]
+  );
+
+  const [selectedCategory, setSelectedCategory] = useState(
+    validationCategories.find((cat) => cat.value === tagData?.validation?.type) ||
+      validationCategories[0]
+  );
 
   const getValidationRules = (category) => {
     switch (category?.value) {
@@ -33,30 +45,40 @@ function ShortParaValidation() {
     }
   };
 
-  const [selectedRule, setSelectedRule] = useState(getValidationRules(selectedCategory)[0]);
+  const [selectedRule, setSelectedRule] = useState(
+    getValidationRules(selectedCategory).find((rule) => rule.value === tagData?.validation?.condition) ||
+      getValidationRules(selectedCategory)[0]
+  );
 
-  const [inputValues, setInputValues] = useState(["", ""]);
-  const [customError, setCustomError] = useState("");
+  const [validationValues, setValidationValues] = useState({
+    value: tagData?.validation?.value || "",
+    min: tagData?.validation?.min || "",
+    max: tagData?.validation?.max || "",
+    errorMessage: tagData?.validation?.errorMessage || "",
+  });
 
-  const getPlaceholderText = () => {
-    switch (selectedCategory?.value) {
-      case "number":
-        return "number";
-      case "text":
-        return "text";
-      case "length":
-        return "number";
-      case "regex":
-        return "pattern";
-      default:
-        return "";
-    }
-  };
+  // Update Redux on state change
+  useEffect(() => {
+    dispatch(
+      updateTagValidation({
+        formId,
+        sectionIndex,
+        tagIndex,
+        validation: {
+          type: selectedCategory.value,
+          condition: selectedRule?.value,
+          ...validationValues,
+        },
+      })
+    );
+  }, [selectedCategory, selectedRule, validationValues, dispatch]);
 
-  const handleInputChange = (index, value) => {
-    const updatedValues = [...inputValues];
-    updatedValues[index] = value;
-    setInputValues(updatedValues);
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setValidationValues((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
   };
 
   return (
@@ -69,7 +91,7 @@ function ShortParaValidation() {
             setSelectedCategory(value);
             const newRules = getValidationRules(value);
             setSelectedRule(newRules[0] || null);
-            setInputValues(["", ""]);
+            setValidationValues({ value: "", min: "", max: "", errorMessage: "" });
           }}
           maxHeight={280}
           maxWidth={180}
@@ -77,59 +99,57 @@ function ShortParaValidation() {
       </div>
 
       <div className="w-[44%] flex items-center gap-4">
-      <div className="text-sm min-w-[40%]">
-        <CustomSelect
-          options={getValidationRules(selectedCategory)}
-          selected={selectedRule}
-          onSelect={setSelectedRule}
-          maxHeight={280}
-          maxWidth={"100%"}
-          disabled={!selectedCategory}
-        />
-      </div>
+        <div className="text-sm min-w-[40%]">
+          <CustomSelect
+            options={getValidationRules(selectedCategory)}
+            selected={selectedRule}
+            onSelect={setSelectedRule}
+            maxHeight={280}
+            maxWidth={"100%"}
+            disabled={!selectedCategory}
+          />
+        </div>
 
-      <div className="text-sm flex-1">
         {selectedRule?.value === "between" || selectedRule?.value === "not_between" ? (
-          <div className="flex gap-2">
+          <div className="text-sm flex-1 flex gap-2">
             <input
               type="number"
+              name="min"
               placeholder="Min"
-              value={inputValues[0]}
-              onChange={(e) => handleInputChange(0, e.target.value)}
+              value={validationValues.min}
+              onChange={handleInputChange}
               className="w-1/2 outline-none border-b border-[#999999]"
             />
             <input
               type="number"
+              name="max"
               placeholder="Max"
-              value={inputValues[1]}
-              onChange={(e) => handleInputChange(1, e.target.value)}
+              value={validationValues.max}
+              onChange={handleInputChange}
               className="w-1/2 outline-none border-b border-[#999999]"
             />
           </div>
         ) : (
           <input
             type={selectedCategory?.value === "number" ? "number" : "text"}
-            placeholder={getPlaceholderText()}
-            value={inputValues[0]}
-            onChange={(e) => handleInputChange(0, e.target.value)}
+            name="value"
+            placeholder={selectedCategory?.value === "regex" ? "Enter pattern" : "Enter value"}
+            value={validationValues.value}
+            onChange={handleInputChange}
             className="w-full outline-none border-b border-[#999999]"
           />
         )}
-      </div>
       </div>
 
       <div className="w-[26%] text-sm">
         <input
           type="text"
+          name="errorMessage"
           placeholder="Custom error message"
-          value={customError}
-          onChange={(e) => setCustomError(e.target.value)}
+          value={validationValues.errorMessage}
+          onChange={handleInputChange}
           className="w-full outline-none border-b border-[#999999]"
         />
-      </div>
-
-      <div className="w-[4%]">
-        <RxCross2 className="text-[#999999]" />
       </div>
     </div>
   );
