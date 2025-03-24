@@ -7,15 +7,9 @@ import {
   textValidations,
   lengthValidations,
   regexValidations,
+  validationCategories,
 } from "@/constants/validationOptions";
 import { updateTagValidation } from "@/redux/store/slices/formSlice";
-
-const validationCategories = [
-  { label: "Number", value: "number" },
-  { label: "Text", value: "text" },
-  { label: "Length", value: "length" },
-  { label: "Regex", value: "regex" },
-];
 
 function ShortParaValidation({ tagIndex, sectionIndex, formId }) {
   const dispatch = useDispatch();

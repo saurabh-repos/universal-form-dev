@@ -4,6 +4,7 @@ import ViewField from "./ViewField";
 
 const ViewForm = ({ form }) => {
   const [currentSectionIndex, setCurrentSectionIndex] = useState(0);
+  const [formData, setFormData] = useState({});
   const dispatch = useDispatch();
 
   const handleNext = () => {
@@ -18,8 +19,16 @@ const ViewForm = ({ form }) => {
     }
   };
 
+  const handleInputChange = (fieldId, value) => {
+    setFormData((prev) => ({
+      ...prev,
+      [fieldId]: value,
+    }));
+  };
+
   const handleSubmit = () => {
-    // dispatch(saveFormToServer(form));
+    console.log("Form Data:", formData);
+    // dispatch(saveFormToServer(formData)); // Uncomment to save to server
     alert("Form submitted successfully!");
   };
 
@@ -38,7 +47,12 @@ const ViewForm = ({ form }) => {
         <h2>{currentSection.title}</h2>
         <p>{currentSection.description}</p>
         {currentSection.tags.map((tag, tagIndex) => (
-          <ViewField key={tagIndex} tag={tag} tagIndex={tagIndex} />
+          <ViewField
+            key={tagIndex}
+            tag={tag}
+            tagIndex={tagIndex}
+            onInputChange={handleInputChange}
+          />
         ))}
       </div>
 

@@ -3,47 +3,19 @@ import React, { useState } from "react";
 import InputComp from "../InputComp";
 import DatePickerComp from "../DatePickerComp";
 import TimePickerComp from "../TimePickerComp";
+import {
+  validateNumber,
+  validateText,
+  validateLength,
+  validateRegex,
+} from "../../lib/formValidation";
 
-const ViewField = ({ tag }) => {
+const ViewField = ({ tag, onInputChange }) => {
   const validationRule = tag?.validation || {};
   const [error, setError] = useState("");
   const [value, setValue] = useState("");
 
-  const validateNumber = (value) => {
-    if (!validationRule.condition) return;
-    let numValue = parseFloat(value);
-
-    switch (validationRule.condition) {
-      case "Greater than":
-        if (!(numValue > validationRule.value))
-          setError(validationRule.errorMessage || "Number too small");
-        else setError("");
-        break;
-      case "Less Than":
-        if (!(numValue < validationRule.value))
-          setError(validationRule.errorMessage || "Number too large");
-        else setError("");
-        break;
-      case "Equal to":
-        if (numValue !== parseFloat(validationRule.value))
-          setError(validationRule.errorMessage || "Must be equal");
-        else setError("");
-        break;
-      case "Is Number":
-        if (isNaN(numValue))
-          setError(validationRule.errorMessage || "Must be a number");
-        else setError("");
-        break;
-      case "Whole number":
-        if (!Number.isInteger(numValue))
-          setError(validationRule.errorMessage || "Must be a whole number");
-        else setError("");
-        break;
-      default:
-        setError("");
-    }
-  };
-
+  console.log("tag",tag);
   const handleBlur = (e) => {
     const inputValue = e.target.value;
     setValue(inputValue);
@@ -53,15 +25,39 @@ const ViewField = ({ tag }) => {
       return;
     }
 
-    if (tag?.type === "short_answer" && validationRule.condition) {
-      validateNumber(inputValue);
+    switch (tag?.validation?.type) {
+      case "number":
+        if (validationRule.condition)
+          validateNumber(inputValue, validationRule, setError);
+        break;
+      case "text":
+        if (validationRule.condition)
+          validateText(inputValue, validationRule, setError);
+        break;
+      case "length":
+        if (validationRule.condition)
+          validateLength(inputValue, validationRule, setError);
+        break;
+      case "regex":
+        if (validationRule.condition)
+          validateRegex(inputValue, validationRule, setError);
+        break;
+      default:
+        setError("");
     }
 
     if (onInputChange) {
-      //   onInputChange(tag._id, inputValue);
-      console.log(inputValue);
+      onInputChange(tag.title, inputValue);
     }
   };
+
+  console.log("tag.type");
+  console.log("tag.type");
+  console.log("tag.type");
+  console.log("tag.type");
+  console.log("tag.type", tag.type);
+
+  console.log("Error:", error);
 
   return (
     <div className="bg-white shadow-lg w-full px-2 py-4 rounded-lg">

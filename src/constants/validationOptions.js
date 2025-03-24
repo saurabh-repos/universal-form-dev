@@ -1,3 +1,11 @@
+export const validationCategories = [
+  { label: "Number", value: "number" },
+  { label: "Text", value: "text" },
+  { label: "Length", value: "length" },
+  { label: "Regex", value: "regex" },
+];
+
+
 export const numberValidations = [
     { label: "Is number", value: "is_number" },
     { label: "Whole number", value: "whole_number" },
