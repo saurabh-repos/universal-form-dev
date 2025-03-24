@@ -28,7 +28,7 @@ function Checkbox({ formId, sectionIndex, tagIndex }) {
   };
 
   return (
-    <div className="w-full flex flex-col gap-1 pl-4">
+    <div className="w-full flex flex-col gap-1 pl-4 dark:text-white">
       {options.map((option) => (
         <div key={option.id} className="flex items-center">
           <IoIosCheckboxOutline className="text-base text-[#999999]" />
@@ -36,7 +36,7 @@ function Checkbox({ formId, sectionIndex, tagIndex }) {
             type="text"
             value={option.value}
             onChange={(e) => handleOptionChange(option.id, e.target.value)}
-            className="flex-1 px-2 outline-none rounded-md text-base text-black"
+            className="flex-1 px-2 outline-none rounded-md text-base text-black dark:text-white"
             placeholder="Option"
           />
           <div className="w-[4%] cursor-pointer" onClick={() => removeOption(option.id)}>

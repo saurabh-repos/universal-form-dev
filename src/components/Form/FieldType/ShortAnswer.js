@@ -12,7 +12,7 @@ function ShortAnswer({ tagIndex, sectionIndex, formId }) {
 
   return (
     <div className="py-2">
-      <p className="text-sm text-black pl-4">Short Answer Text</p>
+      <p className="text-sm text-black dark:text-white pl-4">Short Answer Text</p>
       <div className="py-1">
         {inputValidation && (
           <Suspense fallback={<p>Loading...</p>}>

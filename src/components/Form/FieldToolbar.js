@@ -52,7 +52,7 @@ function FieldToolbar({
         />
       </div>
       <div className="w-[65%] flex items-center justify-end gap-4">
-        <div className={`flex items-center gap-2 bg-white`}>
+        <div className={`flex items-center gap-2 bg-white dark:bg-black`}>
           <span className="text-sm">required</span>
           <ToggleSwitch isOn={required} toggleSwitch={toggleSwitch} />
         </div>

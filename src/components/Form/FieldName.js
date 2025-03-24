@@ -60,9 +60,9 @@ function FieldName({ tagIndex,sectionIndex, formId, tag }) {
         onClick={handleFieldNameEdit}
         onInput={handleInput}
         data-placeholder="Field Name"
-        className={`text-base font-normal w-full outline-none transition-all duration-300 relative ${
+        className={`text-base font-normal w-full outline-none transition-all duration-300 relative dark:text-white ${
           hasText ? "text-black" : "text-[#999999]"
-        }`}
+        }`} 
       >
         {tag.title || ""}
       </p>

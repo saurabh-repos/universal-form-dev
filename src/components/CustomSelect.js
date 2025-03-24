@@ -52,7 +52,7 @@ function CustomSelect({ options, selected, onSelect, maxHeight,maxWidth }) {
   }, [selected]);
 
   return (
-    <div ref={selectRef} className="relative" style={{ maxWidth: maxWidth }}>
+    <div ref={selectRef} className="relative dark:bg-black dark:text-white" style={{ maxWidth: maxWidth }}>
       <div
         onClick={toggleOpen}
         className="flex items-center w-full cursor-pointer focus:ring-2 focus:ring-blue-500"
@@ -65,7 +65,7 @@ function CustomSelect({ options, selected, onSelect, maxHeight,maxWidth }) {
       </div>
       {isOpen && (
         <div
-          className={`absolute z-10 w-full mt-1 bg-white border rounded-lg shadow-lg ${dropUp ? 'bottom-full mb-1' : 'top-full mt-1'}`}
+          className={`absolute z-10 w-full mt-1 bg-white dark:bg-black dark:text-white border rounded-lg shadow-lg ${dropUp ? 'bottom-full mb-1' : 'top-full mt-1'}`}
           style={{ maxHeight: maxHeight, overflowY: 'auto' }}
         >
           {options.map((option, index) => (

@@ -61,7 +61,7 @@ function FormHeader({ fieldId, selectedFieldId, setSelectedFieldId }) {
         ref={titleRef}
         contentEditable
         suppressContentEditableWarning
-        className="text-2xl font-bold text-black break-words outline-none w-full"
+        className="text-2xl font-bold text-black dark:text-white break-words outline-none w-full"
         onFocus={() => handleEdit(titleRef)}
         onBlur={() => handleBlur("title", titleRef.current.innerText)}
       >

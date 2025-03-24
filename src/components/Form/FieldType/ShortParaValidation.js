@@ -87,7 +87,7 @@ function ShortParaValidation({ tagIndex, sectionIndex, formId }) {
   };
 
   return (
-    <div className="flex flex-wrap items-center gap-4 border-t-2 border-dashed border-black box-border p-4">
+    <div className="flex flex-wrap items-center gap-4 border-t-2 border-dashed border-black dark:border-white box-border p-4">
       <div className="w-[18%] text-sm">
         <CustomSelect
           options={validationCategories}

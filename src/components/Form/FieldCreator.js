@@ -73,7 +73,7 @@ const FieldCreator = ({
 
   return (
     <div
-      className={`w-[80%] border border-black rounded-2xl max-h-max gap-4 cursor-pointer ${
+      className={`w-[80%] border border-black dark:border-white rounded-2xl max-h-max gap-4 cursor-pointer ${
         selectedFieldId === tagIndex ? "border-black border-2" : ""
       }`}
       onClick={() => setSelectedFieldId(tagIndex)}
