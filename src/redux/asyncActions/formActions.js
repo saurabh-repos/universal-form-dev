@@ -6,7 +6,7 @@ export const fetchForms = createAsyncThunk(
   "form/fetchForms",
   async (_, { rejectWithValue }) => {
     try {
-      const response = await userRequest.get("/admin/getUniversalForms");
+      const response = await userRequest.get("/user/getUniversalForms");
       return response.data.data;
     } catch (error) {
       return rejectWithValue(error.response?.data || "Failed to fetch forms.");
@@ -19,7 +19,7 @@ export const createForm = createAsyncThunk(
   "form/createForm",
   async (newForm, { rejectWithValue }) => {
     try {
-      const response = await userRequest.post("/admin/createForm", newForm);
+      const response = await userRequest.post("/user/createForm", newForm);
       return response.data;
     } catch (error) {
       return rejectWithValue("Failed to create form.");
@@ -32,7 +32,7 @@ export const updateForm = createAsyncThunk(
   "form/updateForm",
   async ({ id, updates }, { rejectWithValue }) => {
     try {
-      const response = await userRequest.put(`/admin/updateForm?id=${id}`, updates);
+      const response = await userRequest.put(`/user/updateForm?id=${id}`, updates);
       return response.data;
     } catch (error) {
       return rejectWithValue("Failed to update form.");
@@ -64,7 +64,7 @@ export const saveFormToServer = createAsyncThunk(
       delete updates.updatedAt;
       delete updates.__v;
       delete updates._id;
-      const response = await userRequest.put(`/admin/updateForm?id=${formId}`, updates);
+      const response = await userRequest.put(`/user/updateForm?id=${formId}`, updates);
       return response.data;
     } catch (error) {
       return rejectWithValue("Failed to save form to server.");
