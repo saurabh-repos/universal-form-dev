@@ -26,7 +26,7 @@ const CreateHierarchyPage = () => {
 
   return (
     <>
-      {!hieararchyCreated && (
+      {/* {!hieararchyCreated && (
         <div className="w-[80%] flex mx-auto mt-10 gap-6">
           <div className="w-1/2 h-32 border border-dashed border-black p-1 rounded-2xl">
             <button
@@ -42,13 +42,13 @@ const CreateHierarchyPage = () => {
             </button>
           </div>
         </div>
-      )}
-      <div className="flex w-full">
-        <div className="w-1/2">
+      )} */}
+      <div className="flex w-full h-full">
+        <div className="w-1/2 overflow-auto">
           <CreateHierarchyTree />
           {/* <TreeCreator /> */}
         </div>
-        <div className="w-1/2">
+        <div className="w-1/2 overflow-auto h-full">
           <ViewHierarchy />
         </div>
       </div>

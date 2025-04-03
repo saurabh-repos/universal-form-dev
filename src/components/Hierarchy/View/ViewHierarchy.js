@@ -1,35 +1,35 @@
 import React, { useEffect, useState } from "react";
 import Tree from "react-d3-tree";
+import { useSelector } from "react-redux";
 
 const containerStyles = {
-//   width: "100vw",
-  height: "100vh",
+  height: "calc(100vh - 5rem)",
 };
 
+
 const ViewHierarchy = () => {
+  const hierarchyState = useSelector((state) => state.hierarchy.hierarchy);
   const [treeData, setTreeData] = useState(null);
 
   useEffect(() => {
-    const data = localStorage.getItem("hierarchyData");
-    if (data) {
-      const hierarchyData = JSON.parse(data);
-      setTreeData(transformHierarchyToD3Format(hierarchyData));
+    if (hierarchyState) {
+      setTreeData(transformHierarchyToD3Format(hierarchyState));
     }
-  }, []);
+  }, [hierarchyState]);
 
   const transformHierarchyToD3Format = (data) => {
     const processNode = (node) => ({
-      name: node.category,
+      name: node.title,
       value: node.value,
       children: node.children?.map(processNode) || [],
     });
 
-    return data.length ? processNode(data[0]) : null;
+    return processNode(data);
   };
 
   const renderCustomNode = ({ nodeDatum }) => (
     <g>
-      <rect width="300" height="50" x="-150" y="-25" fill="lightblue" stroke="blue" />
+      <rect width="300" height="50" x="-150" y="-25" fill="lightblue" stroke="transparent" />
       <text fill="black" x="0" y="0" textAnchor="middle" alignmentBaseline="middle">{nodeDatum.name}</text>
       {nodeDatum.value && nodeDatum.value.length > 0 && (
         <foreignObject width="300" height="50" x="-150" y="15">
@@ -47,10 +47,11 @@ const ViewHierarchy = () => {
         <Tree
           data={treeData}
           orientation="vertical"
-          translate={{ x: 200, y: 100 }}
+          translate={{ x: 200, y: 40 }}
           nodeSize={{ x: 200, y: 100 }}
           separation={{ siblings: 2, nonSiblings: 2 }}
           renderCustomNodeElement={renderCustomNode}
+          zoom={0.4}
         />
       )}
     </div>

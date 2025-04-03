@@ -1,7 +1,8 @@
-"use client";
-import { addHierarchy } from "@/redux/store/slices/hierarchySlice";
-import axios from "axios";
-import { useSearchParams } from "next/navigation";
+import {
+  addHierarchy,
+  setHierarchyCreatedTrue,
+  updateHierarchy,
+} from "@/redux/store/slices/hierarchySlice";
 import React, { useEffect, useState } from "react";
 import { FaChevronDown, FaChevronRight } from "react-icons/fa";
 import { MdDeleteForever, MdOutlineAddCircle } from "react-icons/md";
@@ -10,17 +11,27 @@ import { useDispatch, useSelector } from "react-redux";
 const operatorOptions = [">", "<", "=", "!=", ">=", "<="];
 
 function CreateHierarchyTree() {
-  const searchParams = useSearchParams();
-  const id = searchParams.get("id");
-
+  const newHierarchy = {
+    id: 1,
+    title: "Form",
+    condition: {
+      field: "",
+      operator: "",
+      value: "",
+    },
+    children: [],
+    expanded: true,
+    value: [],
+    type: "root",
+  };
   const hierarchyState = useSelector((state) => state.hierarchy.hierarchy);
   const isCreated = useSelector((state) => state.hierarchy.isCreated);
-
-  const [nodes, setNodes] = useState(hierarchyState);
-  const [started, setStarted] = useState(false);
+  const dispatch = useDispatch();
+  const [nodes, setNodes] = useState([]);
   const [nodeIdCounter, setNodeIdCounter] = useState(2);
   const [addingNode, setAddingNode] = useState(null);
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [hierarchyType, setHierarchyType] = useState("");
   const [selectedField, setSelectedField] = useState("");
   const [selectedOperator, setSelectedOperator] = useState("");
   const [conditionValue, setConditionValue] = useState("");
@@ -29,43 +40,64 @@ function CreateHierarchyTree() {
     "Field A",
     "Field B",
   ]);
-  const [fieldOptions, setFieldOptions] = useState(["Other"]);
-  const baseURL = process.env.NEXT_PUBLIC_API_URL;
+  const [hierarchyOptions, setHierarchyOptions] = useState([
+    "Category",
+    "Value",
+  ]);
+  const [fieldOptions, setFieldOptions] = useState([
+    "Other",
+    "Type A",
+    "Type B",
+  ]);
 
   useEffect(() => {
-    setNodes(hierarchyState);
+    if (!isCreated) {
+      dispatch(addHierarchy({ hierarchy: newHierarchy }));
+
+      dispatch(setHierarchyCreatedTrue());
+    }
+  }, [isCreated, dispatch]);
+
+  useEffect(() => {
+    setNodes([hierarchyState]);
   }, [hierarchyState]);
 
-  const dispatch = useDispatch();
-  const newHierarchy = {
-    id: 1,
-    category: selectedCategory,
-    children: [],
-    expanded: true,
-    value: [],
-  };
-  const hanldeAddHierarchy = () => {
-    dispatch(addHierarchy({ hierarchy: newHierarchy }));
-  };
+  useEffect(() => {
+    console.log("Updated Nodes Structure:", JSON.stringify(nodes, null, 2));
+  }, [nodes]);
 
   const addChildNode = (id) => {
-    let newCategory =
-      selectedCategory !== "Other"
-        ? selectedCategory
-        : `${selectedField} ${selectedOperator} ${conditionValue}`;
-
     const newId = nodeIdCounter;
     setNodeIdCounter(newId + 1);
-
     setNodes((prevNodes) => {
       const addNode = (node) => {
         if (node.id === id) {
+          const newType = node.type === "category" ? "type" : "category";
+          let newCategory =
+            node.type === "category"
+              ? `${selectedField} ${selectedOperator} ${conditionValue}`
+              : selectedCategory;
+          let newCondition =
+            node.type === "category"
+              ? {
+                  field: selectedField,
+                  operator: selectedOperator,
+                  value: conditionValue,
+                }
+              : {
+                  field: "",
+                  operator: "",
+                  value: "",
+                };
+          node.value = [];
           node.children.push({
             id: newId,
-            category: newCategory,
+            title: newCategory,
+            condition: newCondition,
             children: [],
             expanded: true,
             value: [],
+            type: newType,
           });
           node.expanded = true;
         } else {
@@ -74,8 +106,8 @@ function CreateHierarchyTree() {
       };
 
       const newNodes = JSON.parse(JSON.stringify(prevNodes));
-      // newNodes.forEach(addNode);
-      addNode(newNodes);
+      newNodes.forEach(addNode);
+      dispatch(updateHierarchy({ hierarchy: newNodes[0] }));
       return newNodes;
     });
 
@@ -91,13 +123,15 @@ function CreateHierarchyTree() {
     setNodes((prevNodes) => {
       const removeNode = (nodes) => {
         return nodes
-          .filter((node) => node.id !== id) // Remove the node with the matching ID
+          .filter((node) => node.id !== id)
           .map((node) => ({
             ...node,
-            children: removeNode(node.children), // Recursively check children
+            children: removeNode(node.children),
           }));
       };
-      return removeNode(prevNodes);
+      const updatedNodes = removeNode(prevNodes);
+      dispatch(updateHierarchy({ hierarchy: updatedNodes[0] }));
+      return updatedNodes;
     });
   };
 
@@ -112,8 +146,7 @@ function CreateHierarchyTree() {
       };
 
       const newNodes = JSON.parse(JSON.stringify(prevNodes));
-      // newNodes.forEach(toggleNode);
-      toggleNode(newNodes)
+      newNodes.forEach(toggleNode);
       return newNodes;
     });
   };
@@ -131,8 +164,8 @@ function CreateHierarchyTree() {
       };
 
       const newNodes = JSON.parse(JSON.stringify(prevNodes));
-      // newNodes.forEach(updateNode);
-      updateNode(newNodes)
+      newNodes.forEach(updateNode);
+      dispatch(updateHierarchy({ hierarchy: newNodes[0] })); // Dispatch updated hierarchy
       return newNodes;
     });
   };
@@ -140,11 +173,11 @@ function CreateHierarchyTree() {
   const renderNodes = (node) => {
     return (
       <div
-        key={node.id}
+        key={node.title}
         className="ml-6 pl-6 border-l-2 border-gray-300 mt-2 transition-all duration-300"
       >
         <div className="flex items-center">
-          {node.children.length > 0 && (
+          {node?.children?.length > 0 && (
             <span
               className="cursor-pointer hover:bg-gray-200 transition-colors duration-300 p-2 rounded-full"
               onClick={() => toggleChildren(node.id)}
@@ -153,25 +186,56 @@ function CreateHierarchyTree() {
             </span>
           )}
           <span className="block p-2 bg-gray-100 rounded-md ml-2">
-            {node.category}
+            {node.title}
           </span>
 
           {addingNode === node.id ? (
             <div className="ml-4 flex flex-wrap items-center space-x-2">
-              <select
-                className="px-2 py-1 border rounded-md"
-                value={selectedCategory}
-                onChange={(e) => setSelectedCategory(e.target.value)}
-              >
-                <option value="">Select Category</option>
-                {categoryOptions.map((option, index) => (
-                  <option key={index} value={option}>
-                    {option}
-                  </option>
-                ))}
-              </select>
-
-              {selectedCategory === "Other" && (
+              {node.type === "root" && (
+                <>
+                  <select
+                    className="px-2 py-1 border rounded-md"
+                    value={hierarchyType}
+                    onChange={(e) => setHierarchyType(e.target.value)}
+                  >
+                    <option value="">Select Hierarchy Type</option>
+                    {hierarchyOptions.map((option, index) => (
+                      <option key={index} value={option}>
+                        {option}
+                      </option>
+                    ))}
+                  </select>
+                  {hierarchyType === "Category" && (
+                    <select
+                      className="px-2 py-1 border rounded-md"
+                      value={selectedCategory}
+                      onChange={(e) => setSelectedCategory(e.target.value)}
+                    >
+                      <option value="">Select Category</option>
+                      {categoryOptions.map((option, index) => (
+                        <option key={index} value={option}>
+                          {option}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </>
+              )}
+              {node.type === "type" && (
+                <select
+                  className="px-2 py-1 border rounded-md"
+                  value={selectedCategory}
+                  onChange={(e) => setSelectedCategory(e.target.value)}
+                >
+                  <option value="">Select Category</option>
+                  {categoryOptions.map((option, index) => (
+                    <option key={index} value={option}>
+                      {option}
+                    </option>
+                  ))}
+                </select>
+              )}
+              {node.type === "category" && (
                 <>
                   <select
                     className="px-2 py-1 border rounded-md"
@@ -212,28 +276,30 @@ function CreateHierarchyTree() {
               <button
                 onClick={() => addChildNode(node.id)}
                 className="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-300"
-                disabled={
-                  selectedCategory === "Other" &&
-                  (!selectedField ||
-                    !selectedOperator ||
-                    !conditionValue.trim())
-                }
               >
                 Add
               </button>
             </div>
           ) : (
             <>
-              <button onClick={() => setAddingNode(node.id)} className="ml-4">
-                <MdOutlineAddCircle className="text-green-500 hover:text-green-600 transition-colors duration-300 h-6 w-6" />
-              </button>
-              <button onClick={() => deleteNode(node.id)} className="ml-2">
-                <MdDeleteForever className="text-red-500 hover:text-red-600 transition-colors duration-300 h-6 w-6" />
-              </button>
+              {node.id == 1 && node.children.length > 0 ? null : (
+                <>
+                  <button
+                    onClick={() => setAddingNode(node.id)}
+                    className="ml-4"
+                  >
+                    <MdOutlineAddCircle className="text-green-500 hover:text-green-600 transition-colors duration-300 h-6 w-6" />
+                  </button>
+
+                  <button onClick={() => deleteNode(node.id)} className="ml-2">
+                    <MdDeleteForever className="text-red-500 hover:text-red-600 transition-colors duration-300 h-6 w-6" />
+                  </button>
+                </>
+              )}
             </>
           )}
         </div>
-        {node.children.length === 0 && (
+        {node?.children?.length === 0 && (
           <div className="ml-10 mt-2">
             {node.value.map((val, index) => (
               <span key={index} className="mr-2 p-1 bg-gray-200 rounded-md">
@@ -264,31 +330,8 @@ function CreateHierarchyTree() {
   };
 
   return (
-    <div className="flex flex-col items-center p-4">
-      {Object.keys(nodes).length === 0 && isCreated && (
-        <div className="ml-4 flex flex-wrap items-center space-x-2">
-          <select
-            className="px-2 py-1 border rounded-md"
-            value={selectedCategory}
-            onChange={(e) => setSelectedCategory(e.target.value)}
-          >
-            <option value="">Select Category</option>
-            {categoryOptions.map((option, index) => (
-              <option key={index} value={option}>
-                {option}
-              </option>
-            ))}
-          </select>
-
-          <button
-            onClick={() => hanldeAddHierarchy()}
-            className="px-3 py-1 bg-green-500 text-white rounded-md hover:bg-green-600 transition-colors duration-300"
-          >
-            Add
-          </button>
-        </div>
-      )}
-      {Object.keys(nodes).length !== 0 && renderNodes(nodes)}
+    <div className="flex flex-col items-start p-4">
+      {nodes.map(renderNodes)}
     </div>
   );
 }

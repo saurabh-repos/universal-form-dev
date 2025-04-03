@@ -18,9 +18,12 @@ const hierarchySlice = createSlice({
       const { hierarchy } = action.payload;
       state.hierarchy = hierarchy;
     },
+    updateHierarchy: (state, action) => {
+      state.hierarchy = action.payload.hierarchy;
+    },
   },
 });
 
-export const { addHierarchy, setHierarchyCreatedTrue } = hierarchySlice.actions;
+export const { addHierarchy, setHierarchyCreatedTrue, updateHierarchy } = hierarchySlice.actions;
 
 export default hierarchySlice.reducer;
